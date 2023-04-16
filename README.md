@@ -13,8 +13,13 @@ After a while I thought it would be nice to have a display of fractions of secon
 
 When I was 53 commits ahead of [zsh-command-time plugin](https://github.com/popstas/zsh-command-time), the code between the two branches differed greatly and it would break [zsh-command-time plugin](https://github.com/popstas/zsh-command-time) if it were merged with my code. In addition, his repository no longer seems to be maintained, so I decided to decouple this repository from its origin and create a standalone repository. Nevertheless, popstas deserves most of the credits, because without his code, zsh-cmd-time would not exist at all.
 
-Two points distinguish this fork from the original. One is that the original is bash-compatible. Unfortunately, this is not possible with this repository without bloating the code. That is, this plugin runs only with the Z Shell without any problems.
+## What distinguish this fork from the original?
+
+One is that the original is bash-compatible. Unfortunately, this is not possible with this repository without bloating the code. That is, this plugin runs only with the Z Shell without any problems.
+
 The orignal plugin, on the other hand, only displays whole seconds. This fork __can__ display fractions of seconds. It's up to you whether you want that or not.
+
+In addition, the original is somewhat easier to configure with regard to the color scheme and the output whether very short program execution times should be displayed.
 
 ## Installation
 
@@ -53,7 +58,7 @@ The following screenshot shows two measurements, both with `REPORTTIME=3`, but `
 
 ![sleep_3](https://user-images.githubusercontent.com/123265893/228374769-375d2628-f7c4-443a-969f-3ed9ad21537c.png)
 
-As mentioned before `REPORTTIME` has been set to `REPORTTIME=3`, but `sleep` don't consume any CPU time. However, `REPORTTIME` does not recognize such idle commands and here `zsh-cmd-time` comes into play. As you can see, the right prompt shows the execution time regardless of whether CPU time was consumed or not and this is `zsh-cmd-time` at work.
+As mentioned before `REPORTTIME` has been set to `REPORTTIME=3`, but `sleep` does not consume any CPU time. However, `REPORTTIME` does not recognize such idle commands and here `zsh-cmd-time` comes into play. As you can see, the right prompt shows the execution time regardless of whether CPU time was consumed or not and this is the plugin at work.
 
 So if you want to monitor CPU-consuming commands only, you should use `REPORTTIME` instead of this plugin.
 
@@ -130,7 +135,7 @@ The output on the right prompt in the Z shell looks like this:
 
 | Annotation |
 |:-|
-| While using `print -P` within the right prompt of the Z shell it happened, that the output was heavily misplaced when using the above configuration. Unfortunately `print -P` moves the right prompt towards the center of the window and I have not found a solution for that yet, except to replace `print -P` with `echo -e`. Maybe this is the only solution, who knows. I tried to fix it with `%{$elapsed%}`, but that shifts RPS1 too much to the right and then causes an unwanted line break. Therefore there is a mixture of `echo -e` and `printf` in one line, which looks pretty stupid - but works and even [shellcheck](https://www.shellcheck.net/) does not complain. |
+| When using `print -P` in the right prompt of the Z shell, it happened that the output was severely out of place with the above configuration. Unfortunately, `print -P` moves the right prompt towards the center of the window and I haven't found a solution for this yet, except to replace `print -P` with `echo -e`. Maybe this is the only solution, who knows. I tried to fix it with `%{$elapsed%}`, but that moves RPS1 too much to the right and then causes an unwanted line break. So there is a mix of `echo -e` and `printf` on one line, which looks pretty stupid - but works and even [shellcheck](https://www.shellcheck.net/) do not complain. |
 
 ### 2nd example
 
