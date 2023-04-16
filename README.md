@@ -21,24 +21,26 @@ and then add
 ```zsh
 zplugin load TomfromBerlin/zsh-cmd-time
 ```
-to your .zshrc. [zplugin](/../../../../TomfromBerlin/zplugin) downloads the plugin and compiles it with zcompile, giving your shell a noticeable performance boost.
+to your .zshrc. [zplugin](/../../../../TomfromBerlin/zplugin) downloads the plugin, and compiles it with zcompile giving your shell a noticeable performance boost.
 
 **To display the execution time in the right prompt, add the following line to your prompt definitions (probably in your .zshrc)**.
 
 ```zsh
-RPS1='$elapsed %(?.%F{green}√.%K{red}%F{black} Nope!)%f%k'
+RPS1='${elapsed} %(?.%F{green}√.%K{red}%F{black} Nope!)%f%k'
 ```
 
-If you don't want that just put `echo -e $(elapsed)` or `echo -e $timer_show` right above your prompt or without `echo -e` somewhere in your PS1 definition. At this point, it is quite helpful to have a little knowledge about how to customize the prompt.
+If you don't want that just put `echo -e $(elapsed)` or `echo -e $(timer_show)` right above your prompt or without `echo -e` somewhere in your PS1 definition. In Bash you can use (parentheses), while the Z shell accepts {braces} or does not require them at all. At this point, it is quite helpful to have a little knowledge about how to customize the prompt.
 
-Execution time will then be shown within or right above your left prompt. If you only want to see the execution time without any text you can use `$timer_show`.
+Execution time will then be shown right above, or within your left prompt. If you only want to see the execution time without any text you can use the `timer_show` variable.
 
-Within the Z shell it is possible, that you experience misplacing of your cursor or other unexpected behavior, especially when you use the 2nd configuration inside your PS1, or RPS1 respectively. Unfortunately `printf` and `print -P` don't work well with this configuration - or I am stupid, which is quite possible. You can try to fix it with `%{$elapsed%}`, but avoid doing this in the right prompt. It may replace RPS1 to much and causes then an unwanted line break. Therefore there is a mixture of `echo -e` and `printf` in one line, which looks pretty stupid - but works.
+Within the Z shell it is possible, that you experience misplacing of your cursor or other unexpected behavior, especially when you use the 2nd configuration inside your PS1, or RPS1 respectively.
+
+Unfortunately `print -P` moves the right prompt towards the center of the window and I have not found a solution for that yet, except to replace `print -P` with `echo -e`. Maybe this is the only solution, who knows. I tried to fix it with `%{$elapsed%}`, but that shifts RPS1 too much to the right and then causes an unwanted line break. Therefore there is a mixture of `echo -e` and `printf` in one line, which looks pretty stupid - but works.
 
 _Other plugin managers / frameworks see [here](README.md#install-with-antigen)_
 
 ### Description of zsh-cmd-time
-`zsh-cmd-time` is a plugin that outputs the execution time of commands and exports the result to a variable that can be used elsewhere. It is similar to the built-in function [REPORTTIME](http://zsh.sourceforge.net/Doc/Release/Parameters.html), but also slightly different.
+`zsh-cmd-time` is a plugin that outputs the execution time of commands and exports the result to a variable that can be used elsewhere. It is similar to the built-in [REPORTTIME](http://zsh.sourceforge.net/Doc/Release/Parameters.html) function, but it is also slightly different.
 
 `REPORTTIME` is a nifty feature of zsh. If you set it to a non-negative value, then every time, any command you run that takes longer than the value you set it to in seconds, zsh will print usage statistics afterwards as if you had run the command prefixed with `time`. Well, almost every time.
 
@@ -48,71 +50,30 @@ The following screenshot shows two measurements, both with `REPORTTIME=3`, but `
 
 As mentioned before `REPORTTIME` has been set to `REPORTTIME=3`, but `sleep` don't consume any CPU time. However, `REPORTTIME` does not recognize such idle commands and here `zsh-cmd-time` comes into play. As you can see, the right prompt shows the execution time regardless of whether CPU time was consumed or not and this is `zsh-cmd-time` at work.
 
-So if you want to monitor CPU-hungry commands only, you should use `REPORTTIME` instead of this plugin.
+So if you want to monitor CPU-consuming commands only, you should use `REPORTTIME` instead of this plugin.
 
 ## Configuration
 
 You can override defaults in `.zshrc`:
 ```zsh
-# If command execution time below min. time, the plugin will not output
-# This will only work with the first config example (see below)
-ZSH_CMD_TIME_MIN_SECONDS=3
 
 # Message to display (set to "" for disable).
 ZSH_CMD_TIME_MSG="took %s"
 
-# Message color. This will only work with the first config example (see below)
-ZSH_CMD_TIME_COLOR="cyan"
-
 # Exclude some commands
-ZSH_CMD_TIME_EXCLUDE=(vim mc mcedit clear cls)
+ZSH_CMD_TIME_EXCLUDE=(vim nano ranger mc mcedit clear cls)
 ```
 
 ### Customization
-You can customize the output of the plugin by redefining the zsh_command_time function. Here are three examples of custom definitions.
-
-### 1st example (config variation from original plugin)
-
-```zsh
-zsh_cmd_time() {
-    if [[ -n "$ZSH_CMD_TIME" ]]; then
-        hours=$(($ZSH_CMD_TIME/3600))
-        min=$(($ZSH_CMD_TIME/60))
-        sec=$(($ZSH_CMD_TIME%60))
-        if [ "$ZSH_CMD_TIME" -le 60 ]; then
-            timer_show="%F{cyan}""$ZSH_CMD_TIME"" %F{white}s"
-        elif [ "$ZSH_CMD_TIME" -gt 60 ] && [ "$ZSH_CMD_TIME" -le 180 ]; then
-            timer_show="%F{yellow}""$min"" %F{white}m %F{yellow}$sec"" %F{white}s"
-        else
-            if [ "$hours" -gt 0 ]; then
-                min=$(($min%60))
-                timer_show="%F{red}""$hours""hr(s) %F{white}: %F{red}$min""%F{white}m : %F{red}$sec""%F{white}s"
-            else
-                timer_show="%F{red}""$min""%F{white}m : %F{red}$sec""%F{white}s"
-            fi
-        fi
-        printf "${ZSH_CMD_TIME_MSG}\n" "$timer_show"
-    fi
-}
-```
-You can see the result of this adjustment on the following screenshot:
-
-![screenshot](screen.jpg)
+You can customize the output of the plugin by redefining the zsh_command_time function. Here are two examples of custom definitions.
 
 The variable $ZSH_COMMAND_TIME contains the execution time in seconds since the execution time is always measured in seconds. The plugin converts the seconds into minutes and hours if it seems necessary and output this information in the terminal.
-* Commands executed in less than one minute are highlighted by green color.
-* Commands that were executed less than three minutes are highlighted by yellow color.
-* Commands that were executed more than three minutes are highlighted by red color.
 
-Unfortunately with this configuration it can handle integers only.
-
-### 2nd example (default config in this fork)
+### 1st example (default config in this fork)
 
 The configuration below can handle floating point numbers and will display six decimal places for short commands (< 1 minute). Longer execution times will be displayed as "mm:ss", or "hh:mm:ss" respectively. When execution time is above 60 seconds, neither milliseconds nor nanoseconds are displayed.
 
 For output in milliseconds, or even nanoseconds you have to put `typeset -F SECONDS` into your .zshrc, otherwise there are only zeros as decimal places.
-
-But we have lost bash compatibility (the color codes are handled differently in bash), and the ability to discard the execution time output of short commands. Yes well, we have micro- and milliseconds and - if desired - even nanoseconds. Why should we discard the output?
 
 ```zsh
 zsh_cmd_time() {
@@ -123,45 +84,46 @@ zsh_cmd_time() {
         s=$(bc <<< "${ZSH_CMD_TIME}%60")
         if [[ "$ZSH_CMD_TIME" -le 1 ]]; then
              ZSH_CMD_TIME_COLOR="magenta"
-             timer_show=$(printf %.6f" sec" $ZSH_CMD_TIME)
+             timer_show=$(printf %.6f" sec" "$ZSH_CMD_TIME")
         elif [[ "$ZSH_CMD_TIME" -le 60 ]]; then
              ZSH_CMD_TIME_COLOR="green"
-             timer_show=$(printf %.3f" sec" $ZSH_CMD_TIME) # "%.nf" defines the number of decimal places,
-                                                               # where "n" is an integer. Values above 14 are
-                                                               # possible, but not useful, because the
-                                                               # computer's internal representation of
-                                                               # floating point Numbers has a limited number
-                                                               # of bits and as a consequence a limited accuracy.
-                                                               # So numbers with floating point cannot be
-                                                               # stored as e.g. 3.000000000.... in memory,
-                                                               # but as 3.0000000002 or 2.99999998.
-                                                               # You can safely ignore everything after
-                                                               # the 14th decimal place in a result.
+             timer_show=$(printf %.3f" sec" "$ZSH_CMD_TIME") # "%.nf" defines the number of decimal places,
+                                                           # where "n" is an integer. Values above 14 are
+                                                           # possible, but not useful, because the
+                                                           # computer's internal representation of
+                                                           # floating point Numbers has a limited number
+                                                           # of bits and as a consequence a limited accuracy.
+                                                           # So numbers with floating point cannot be
+                                                           # stored as e.g. 3.000000000.... in memory,
+                                                           # but as 3.0000000002 or 2.99999998.
+                                                           # You can safely ignore everything after
+                                                           # the 14th decimal place in a result.
         elif [[ "$ZSH_CMD_TIME" -gt 60 ]] && [[ "$ZSH_CMD_TIME" -le 180 ]]; then
              ZSH_CMD_TIME_COLOR="cyan"
-             timer_show=$(printf '%02dm:%02ds' $(($m)) $(($s)))
+             timer_show=$(printf '%02dm:%02ds' $((m)) $((s)))
         else
             if [[ "$h" -gt 0 ]]; then
-                m=$(($m%60))
+                m=$((m%60))
              ZSH_CMD_TIME_COLOR="red"
-                 timer_show=$(printf '%dh:%02dm:%02ds' $(($h)) $(($m)) $(($s)))
+                 timer_show=$(printf '%dh:%02dm:%02ds' $((h)) $((m)) $((s)))
             else
              ZSH_CMD_TIME_COLOR="yellow"
-                 timer_show=$(printf '%02dm:%02ds' $(($m)) $(($s)))
+                 timer_show=$(printf '%02dm:%02ds' $((m)) $((s)))
             fi
         fi
-          export elapsed=$(echo -e "%F{$ZSH_CMD_TIME_COLOR}$(printf "${ZSH_CMD_TIME_MSG} $timer_show")%f")
+          elapsed=$(echo -e "%F{$ZSH_CMD_TIME_COLOR}$(printf '%s' "${ZSH_CMD_TIME_MSG}"" $timer_show")%f")
+          export elapsed
     fi
 }
 ```
 
-When execution time is below 1 second you will see 6 decimal places, above 1 second up to 60 seconds there will be 3 decimal places. Above 1 minutes the output is mm:ss, or hh:mm:ss if you have very long running commands with execution times over one hour.
+When execution time is below 1 second you will see 6 decimal places, between one second and 60 seconds there will be 3 decimal places. If execution time lasts more than one minute the output is mm:ss, or hh:mm:ss if you have very long running commands with execution times over one hour.
 
 The output on the right prompt in the Z shell looks like this:
 
-![zsh-completion-time_rps1](https://user-images.githubusercontent.com/123265893/228359098-71e44196-72f0-40bd-accd-9208784f160e.png)
+![zsh-cmd-time](https://user-images.githubusercontent.com/123265893/232322193-3d9ad194-1d30-4415-83b5-29c4093c7fae.png)
 
-### 3rd example
+### 2nd example
 
 This is a similar configuration, but without color output of the execution time.
 
@@ -173,25 +135,17 @@ zsh_cmd_time() {
         m=$(bc <<< "(${ZSH_CMD_TIME}%3600)/60")
         s=$(bc <<< "${ZSH_CMD_TIME}%60")
         if [[ "$ZSH_CMD_TIME" -le 1 ]]; then
-             timer_show=$(printf %.6f" sec" $ZSH_CMD_TIME)
+             timer_show=$(printf %.6f" sec" "$ZSH_CMD_TIME")
         elif [[ "$ZSH_CMD_TIME" -le 60 ]]; then
-            timer_show=$(printf %.3f" sec" $ZSH_CMD_TIME)  # "%.nf" defines the number of decimal places,
-                                                               # where "n" is an integer. Values above 14 are
-                                                               # possible, but not useful, because the computer's
-                                                               # internal representation of floating point Numbers
-                                                               # has a limited number of bits and as a consequence
-                                                               # a limited accuracy. So numbers with floating point
-                                                               # cannot be stored as e.g. 3.000000000.... in memory,
-                                                               # but as 3.0000000002 or 2.99999998.
-                                                               # You can safely ignore everything after the
-                                                               # 14th decimal place in a result.
+            timer_show=$(printf %.3f" sec" "$ZSH_CMD_TIME")  # for explanation of "%.nf"
+                                                             # see configuration example above
         elif [[ "$h" -gt 0 ]]; then
-                 m=$(($m%60))
-                 timer_show=$(printf '%dh:%02dm:%02ds' $(($h)) $(($m)) $(($s)))
+                 m=$((m%60))
+                 timer_show=$(printf '%dh:%02dm:%02ds' $((h)) $((m)) $((s)))
         else
-                 timer_show=$(printf '%02dm:%02ds' $(($m)) $(($s)))
+                 timer_show=$(printf '%02dm:%02ds' $((m)) $((s)))
         fi
-         printf "${ZSH_CMD_TIME_MSG}" "$timer_show"
+         printf '%s' "${ZSH_CMD_TIME_MSG}" " $timer_show"
     fi
 }
 ```
@@ -219,29 +173,14 @@ git clone https://github.com/TomfromBerlin/zsh-cmd-time.git ~/.oh-my-zsh/custom/
 And add `cmd-time` to `plugins` in `.zshrc`.
 
 ## Usage with [powerlevel9k](/../../../../bhilburn/powerlevel9k) theme
-You should not use this plugin with powerlevel9k or p10k, because powerlevel9k as of v0.6.0 has a [native segment of command_execution_time](/../../../../bhilburn/powerlevel9k#command_execution_time)
+
+❗ **To make it short: Do not use this plugin with powerlevel9k/p10k** ❗ 
+
+powerlevel9k as of v0.6.0 has a [native segment of command_execution_time](/../../../../bhilburn/powerlevel9k#command_execution_time)
 (see [PR](/../../../../bhilburn/powerlevel9k/pull/402)), so you can easily add it to your prompt:
 
 ```bash
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status background_jobs vcs command_execution_time time)
 ```
 
-If you do not want to use their plugin (for whatever reason), I recommend to use the original [zsh-command-time](/../../../../popstas/zsh-command-time) made by [popstas](/../../../../popstas)
-
-In this case just add a custom element in `.zshrc`:
-
-```bash
-POWERLEVEL9K_CUSTOM_COMMAND_TIME="zsh_command_time"
-POWERLEVEL9K_CUSTOM_COMMAND_TIME_BACKGROUND="253" # white
-POWERLEVEL9K_CUSTOM_COMMAND_TIME_FOREGROUND="000" # black
-```
-
-And add element `custom_command_time` to your prompt:
-
-```bash
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status background_jobs vcs custom_command_time time)
-```
-
-## ~~Provision with ansible~~
-~~Plugin command-time included in ansible role [viasite-ansible/ansible-role-zsh](https://github.com/viasite-ansible/ansible-role-zsh)
-with other useful plugins. Plugin excluded from viasite-ansible.zsh, but you can still check role.~~
+And now have fun and be nice to each other.
