@@ -3,9 +3,17 @@
 | ![Views](https://img.shields.io/endpoint?color=green&label=Views&logoColor=red&style=plastic&url=https%3A%2F%2Fhits.dwyl.com%2FTomfromBerlin%2Fzsh-cmd-time) | ![Unique Viewers](https://img.shields.io/endpoint?color=green&label=Unique%20Viewers&logoColor=pink&style=plastic&url=https%3A%2F%2Fhits.dwyl.com%2FTomfromBerlin%2Fzsh-cmd-time%3Fshow%3Dunique) |
 |-|-|
 
-I created this fork because I want to have a display of the command execution time in my RPS1, but I don't want using frameworks like antigen or powerlevel9k/p10k, although they're good and sophisticated frameworks for the Z shell.
+## Introduction
 
-Two points distinguish this fork from the original. One is that the original is bash-compatible. Unfortunately, this is not possible with this configuration without bloating the code. That is, this plugin runs only with the Z Shell without any problems.
+Actually, this is a fork of [zsh-command-time plugin](https://github.com/popstas/zsh-command-time) made by [Stanislav Popov](https://github.com/popstas), who honestly seems to be a much more talented developer than me.
+
+I created this fork because I wanted to have a display of the command execution time in my RPS1, but I do not want to use frameworks like antigen or powerlevel9k/p10k, although they are good and sophisticated frameworks for the Z shell.
+
+After a while I thought it would be nice to have a display of fractions of seconds for short commands and I startet to search for a ready-to-use solution. I did not found any, so I created my own based on the [zsh-command-time plugin](https://github.com/popstas/zsh-command-time).
+
+When I was 53 commits ahead of [zsh-command-time plugin](https://github.com/popstas/zsh-command-time), the code between the two branches differed greatly and it would break [zsh-command-time plugin](https://github.com/popstas/zsh-command-time) if it were merged with my code. In addition, his repository no longer seems to be maintained, so I decided to decouple this repository from its origin and create a standalone repository. Nevertheless, popstas deserves most of the credits, because without his code, zsh-cmd-time would not exist at all.
+
+Two points distinguish this fork from the original. One is that the original is bash-compatible. Unfortunately, this is not possible with this repository without bloating the code. That is, this plugin runs only with the Z Shell without any problems.
 The orignal plugin, on the other hand, only displays whole seconds. This fork __can__ display fractions of seconds. It's up to you whether you want that or not.
 
 ## Installation
@@ -21,7 +29,7 @@ and then add
 ```zsh
 zplugin load TomfromBerlin/zsh-cmd-time
 ```
-to your .zshrc. [zplugin](/../../../../TomfromBerlin/zplugin) downloads the plugin, and compiles it with zcompile giving your shell a noticeable performance boost.
+to your `.zshrc` to install the zsh-cmd-time plugin. [zplugin](/../../../../TomfromBerlin/zplugin) then downloads the plugin, and compiles it with zcompile giving your shell a noticeable performance boost.
 
 **To display the execution time in the right prompt, add the following line to your prompt definitions (probably in your .zshrc)**.
 
@@ -33,13 +41,10 @@ If you don't want that just put `echo -e $(elapsed)` or `echo -e $(timer_show)` 
 
 Execution time will then be shown right above, or within your left prompt. If you only want to see the execution time without any text you can use the `timer_show` variable.
 
-Within the Z shell it is possible, that you experience misplacing of your cursor or other unexpected behavior, especially when you use the 2nd configuration inside your PS1, or RPS1 respectively.
-
-Unfortunately `print -P` moves the right prompt towards the center of the window and I have not found a solution for that yet, except to replace `print -P` with `echo -e`. Maybe this is the only solution, who knows. I tried to fix it with `%{$elapsed%}`, but that shifts RPS1 too much to the right and then causes an unwanted line break. Therefore there is a mixture of `echo -e` and `printf` in one line, which looks pretty stupid - but works.
-
 _Other plugin managers / frameworks see [here](README.md#install-with-antigen)_
 
 ### Description of zsh-cmd-time
+
 `zsh-cmd-time` is a plugin that outputs the execution time of commands and exports the result to a variable that can be used elsewhere. It is similar to the built-in [REPORTTIME](http://zsh.sourceforge.net/Doc/Release/Parameters.html) function, but it is also slightly different.
 
 `REPORTTIME` is a nifty feature of zsh. If you set it to a non-negative value, then every time, any command you run that takes longer than the value you set it to in seconds, zsh will print usage statistics afterwards as if you had run the command prefixed with `time`. Well, almost every time.
@@ -122,6 +127,10 @@ When execution time is below 1 second you will see 6 decimal places, between one
 The output on the right prompt in the Z shell looks like this:
 
 ![zsh-cmd-time](https://user-images.githubusercontent.com/123265893/232322193-3d9ad194-1d30-4415-83b5-29c4093c7fae.png)
+
+| Annotation |
+|:-|
+| While using `print -P` within the right prompt of the Z shell it happened, that the output was heavily misplaced when using the above configuration. Unfortunately `print -P` moves the right prompt towards the center of the window and I have not found a solution for that yet, except to replace `print -P` with `echo -e`. Maybe this is the only solution, who knows. I tried to fix it with `%{$elapsed%}`, but that shifts RPS1 too much to the right and then causes an unwanted line break. Therefore there is a mixture of `echo -e` and `printf` in one line, which looks pretty stupid - but works and even [shellcheck](https://www.shellcheck.net/) does not complain. |
 
 ### 2nd example
 
