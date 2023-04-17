@@ -56,7 +56,8 @@ _Other plugin managers / frameworks see [here](README.md#install-with-antigen)_
 
 The following screenshot shows two measurements, both with `REPORTTIME=3`, but `REPORTTIME` itself remains silent. The output would look like that of the second measurement but that comes from `time` command. (Just ignore the right prompt at this point.)
 
-![sleep_3](https://user-images.githubusercontent.com/123265893/228374769-375d2628-f7c4-443a-969f-3ed9ad21537c.png)
+![report_time](https://user-images.githubusercontent.com/123265893/232534671-51fba2c4-a0ff-4554-8dcd-95ec3b393b37.png)
+
 
 As mentioned before `REPORTTIME` has been set to `REPORTTIME=3`, but `sleep` does not consume any CPU time. However, `REPORTTIME` does not recognize such idle commands and here `zsh-cmd-time` comes into play. As you can see, the right prompt shows the execution time regardless of whether CPU time was consumed or not and this is the plugin at work.
 
