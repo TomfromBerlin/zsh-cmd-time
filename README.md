@@ -56,12 +56,13 @@ _Other plugin managers / frameworks see [here](README.md#install-with-antigen)_
 
 The following screenshot shows two measurements, both with `REPORTTIME=3`, but `REPORTTIME` itself remains silent. The output would look like that of the second measurement but that comes from `time` command. (Just ignore the right prompt at this point.)
 
-![report_time](https://user-images.githubusercontent.com/123265893/232534671-51fba2c4-a0ff-4554-8dcd-95ec3b393b37.png)
+![reporttime](https://user-images.githubusercontent.com/123265893/232536349-55ca37e6-7fdf-45dc-93bb-6a4cf9bcd14a.png)
 
-
-As mentioned before `REPORTTIME` has been set to `REPORTTIME=3`, but `sleep` does not consume any CPU time. However, `REPORTTIME` does not recognize such idle commands and here `zsh-cmd-time` comes into play. As you can see, the right prompt shows the execution time regardless of whether CPU time was consumed or not and this is the plugin at work.
+As mentioned before `REPORTTIME` has been set to `REPORTTIME=3` (seconds) and one would expect a response by `REPORTTIME`. However, `sleep` does not consume any CPU time and `REPORTTIME` does not recognize such idle commands. Here `zsh-cmd-time` comes into play. As you can see, the right prompt shows the execution time regardless of whether CPU time was consumed or not and this is the plugin at work.
 
 So if you want to monitor CPU-consuming commands only, you should use `REPORTTIME` instead of this plugin.
+
+_At this point, it is probably worth mentioning that the measured times do vary, especially with many decimal places, even if the same program is executed twice directly in succession. Well, the measurement is not done with a high precision clock, but with a computer with many different components of hardware and software, which can have different effects at different times. In addition, there are rounding errors, which are unavoidable due to the way floating point numbers are handled in a digital environment. For this reason, the measured times are to be understood rather as approximate values. If necessary, a series of measurements is recommended, from which an average value can then be calculated._
 
 ## Configuration
 
