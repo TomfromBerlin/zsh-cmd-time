@@ -170,7 +170,7 @@ zsh_cmd_time() {
 Todo:
 - [x] Make sure that the plugin outputs fractions of a second (milliseconds) if the execution of a command takes less than 1.5 seconds. This way you will have a handy benchmark tool, even though it won't be very accurate. The output should be in a readable format.
 - [x] colored output depending on command execution time
-- [ ] reset the right prompt after `clear`/`cls`; unfortunately after clearing the screen with `clear` the execution time of the last command still persists in the right prompt (even with `setopt TRANSIENT_PROMPT`). The only way to avoid this is to measure the execution time of `clear`, but I don't want to do that because it doesn't seem reasonable.
+- [ ] reset the right prompt after runnung expluded commands; unfortunately after clearing the screen with `clear` the execution time of the last command still persists in the right prompt (even with `setopt TRANSIENT_PROMPT`). The only way to avoid this is to measure the execution time of `clear`, but I don't want to do that because it doesn't seem reasonable.
 
 -------------------------------------------------------
 
