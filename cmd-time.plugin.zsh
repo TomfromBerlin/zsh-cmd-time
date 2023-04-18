@@ -14,14 +14,13 @@
 #                                                                              #
 ################################################################################
 _cmd_time_preexec() {
-  # check excluded
+  # check if command is excluded
   if [[ -n "$ZSH_CMD_TIME_EXCLUDE" ]]; then
     cmd="$1"
-    for exc ($ZSH_CMD_TIME_EXCLUDE) do;
-      if [[ "$(echo $cmd | grep -c "$exc")" -gt 0 ]]; then
+    for exc in $ZSH_CMD_TIME_EXCLUDE; do
+      if [[ "$(echo "$cmd" | grep -c "$exc")" -gt 0 ]]; then
 #        echo "Command excluded: $exc"
         return
-        zle reset-prompt
       fi
     done
   fi
