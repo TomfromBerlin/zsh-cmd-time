@@ -171,13 +171,13 @@ zsh_cmd_time() {
 Todo:
 - [x] Make sure that the plugin outputs fractions of a second (milliseconds) if the execution of a command takes less than 1.5 seconds. This way you will have a handy benchmark tool, even though it won't be very accurate. The output should be in a readable format.
 - [x] colored output depending on command execution time
-- [ ] reset the right prompt after runnung expluded commands; unfortunately after clearing the screen with `clear` the execution time of the last command still persists in the right prompt (even with `setopt TRANSIENT_PROMPT`). The only way to avoid this is to measure the execution time of `clear`, but I don't want to do that because it doesn't seem reasonable.
+- [ ] reset the execution time in the right prompt after running excluded commands; unfortunately after running an excluded command the execution time of the previous command remains in the right prompt (even with `setopt TRANSIENT_PROMPT`). The only way to avoid this so far is not to exclude any commands.
 
 -------------------------------------------------------
 
 ## Install with [antigen](/../../../../zsh-users/antigen)
 
-```bash
+```zsh
 antigen bundle TomfromBerlin/zsh-cmd-time
 ```
 
@@ -185,7 +185,7 @@ antigen bundle TomfromBerlin/zsh-cmd-time
 
 Download:
 
-```bash
+```zsh
 git clone https://github.com/TomfromBerlin/zsh-cmd-time.git ~/.oh-my-zsh/custom/plugins/cmd-time
 ```
 
@@ -195,11 +195,8 @@ And add `cmd-time` to `plugins` in `.zshrc`.
 
 ❗ **To make it short: Do not use this plugin with powerlevel9k/p10k** ❗ 
 
-powerlevel9k as of v0.6.0 has a [native segment of command_execution_time](/../../../../bhilburn/powerlevel9k#command_execution_time)
-(see [PR](/../../../../bhilburn/powerlevel9k/pull/402)), so you can easily add it to your prompt:
+powerlevel9k as of v0.6.0 has a [native segment of command_execution_time](/../../../../bhilburn/powerlevel9k#command_execution_time), so you can easily add it to your prompt:
 
-```bash
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status background_jobs vcs command_execution_time time)
-```
+`POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status background_jobs vcs command_execution_time time)`
 
 And now have fun and be nice to each other.
