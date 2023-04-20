@@ -74,9 +74,10 @@ ZSH_CMD_TIME_EXCLUDE=(vim nano ranger mc mcedit clear cls)
 ```
 
 ### Customization
-You can customize the output of the plugin by redefining the zsh_command_time function. Here are two examples of custom definitions.
 
 The variable $ZSH_COMMAND_TIME contains the execution time in seconds since the execution time is always measured in seconds. The plugin converts the seconds into minutes and hours if it seems necessary and output this information in the terminal.
+
+You can customize the output of the plugin by redefining the zsh_command_time function. Here are two examples of custom definitions.
 
 The configuration below can handle floating point numbers and will display decimal places for short commands:
 
