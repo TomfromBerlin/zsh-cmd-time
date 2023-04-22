@@ -138,7 +138,7 @@ The output on the right prompt in the Z shell looks like this:
 
 ![zsh-cmd-time](https://user-images.githubusercontent.com/123265893/232322193-3d9ad194-1d30-4415-83b5-29c4093c7fae.png)
 
-You can change the colors, too. Just look for `"magenta"`, `"green"`, `"yellow"`, and `"red"` and replace it with your desired colors. Double quotes are required.
+You can change the colors, too. Just look for `"cyan"`, `"green"`, `"magenta"`, `"red"`, and `"yellow"` and replace it with your desired colors. Double quotes are required.
 
 | Annotation |
 |:-|
