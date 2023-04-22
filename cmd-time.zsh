@@ -6,79 +6,45 @@
 #                                                                              #
 ################################################################################
 #                                                                              #
-# for output in milliseconds, or even nanoseconds you have to put              #
-# somewhere into your .zshrc                                                   #
+# This plugin will overwrite your existing RPS1.                               #
+# You can avoid that by replacing the RPS1 definition in line 23 and           #
+# line 45 with your own.                                                       #
+# For the output of the execution time you have to keep ${elapsed} in line 45. #
+#                                                                              #
+# for the output of decimal places you have to put                             #
+#                                                                              #
 # typeset -F SECONDS                                                           #
 #                                                                              #
-# otherwise there will be only zeros as decimal places.                        #
+# into your .zshrc, otherwise there will be only zeros as decimal places.      #
 #                                                                              #
 ################################################################################
 _cmd_time_preexec() {
-  # check if command is excluded
-  if [[ -n "$ZSH_CMD_TIME_EXCLUDE" ]]; then
-    cmd="$1"
-    for exc in $ZSH_CMD_TIME_EXCLUDE; do
-      if [[ "$(echo "$cmd" | grep -c "$exc")" -gt 0 ]]; then
-#        echo "Command excluded: $exc"
-        return
-      fi
-    done
-  fi
-  timer=${timer:-$SECONDS}
-  ZSH_CMD_TIME_MSG=${ZSH_CMD_TIME_MSG-"Time: %s"}
-  ZSH_CMD_TIME_COLOR=${ZSH_CMD_TIME_COLOR-"cyan"}
-  ZSH_CMD_TIME=""
-  export ZSH_CMD_TIME
-}
-_cmd_time_precmd() {
-  if [[ $timer ]]; then
-    timer_show=$(($SECONDS - $timer))
-      export ZSH_CMD_TIME="$timer_show"
-      zsh_cmd_time
-    unset timer
-  fi
-}
+  # check excluded
+    [[ -n "$ZSH_CMD_TIME_EXCLUDE" ]] && for exc in $ZSH_CMD_TIME_EXCLUDE; do [ "$(echo "$1" | grep -c "$exc")" -gt 0 ] && RPS1='${vcs_info_msg_0_} %(?.%F{green}√.%K{red}%F{black} Nope!)%f%k' && return; done
+    timer=${timer:-$SECONDS}; timer_show=""; export timer_show
+    }
+_cmd_time_precmd() { [[ $timer ]] && timer_show=$(($SECONDS - $timer)) && export timer_show && zsh_cmd_time && unset timer }
 zsh_cmd_time() {
-    if [[ -n "$ZSH_CMD_TIME" ]]; then
+    if [[ -n "$timer_show" ]]; then
 # we leave the handling of floating point numbers to bc --> https://www.gnu.org/software/bc/manual/html_mono/bc.html
-        h=$(bc <<< "${ZSH_CMD_TIME}/3600")
-        m=$(bc <<< "(${ZSH_CMD_TIME}%3600)/60")
-        s=$(bc <<< "${ZSH_CMD_TIME}%60")
-        if [[ "$ZSH_CMD_TIME" -le 1 ]]; then
-             ZSH_CMD_TIME_COLOR="magenta"
-             timer_show=$(printf '%.6f'" sec" "$ZSH_CMD_TIME")
-        elif [[ "$ZSH_CMD_TIME" -le 60 ]]; then
-             ZSH_CMD_TIME_COLOR="green"
-             timer_show=$(printf '%.3f'" sec" "$ZSH_CMD_TIME") # "%.nf" defines the number of decimal places,
-                                                           # where "n" is an integer. Values above 14 are
-                                                           # possible, but not useful, because the
-                                                           # computer's internal representation of
-                                                           # floating point Numbers has a limited number
-                                                           # of bits and as a consequence a limited accuracy.
-                                                           # So numbers with floating point cannot be
-                                                           # stored as e.g. 3.000000000.... in memory,
-                                                           # but as 3.0000000002 or 2.99999998.
-                                                           # You can safely ignore everything after
-                                                           # the 14th decimal place in a result.
-        elif [[ "$ZSH_CMD_TIME" -gt 60 ]] && [[ "$ZSH_CMD_TIME" -le 180 ]]; then
-             ZSH_CMD_TIME_COLOR="cyan"
-             timer_show=$(printf '%02dm:%02ds' $((m)) $((s)))
-        else
-            if [[ "$h" -gt 0 ]]; then
-                m=$((m%60))
-             ZSH_CMD_TIME_COLOR="red"
-                 timer_show=$(printf '%dh:%02dm:%02ds' $((h)) $((m)) $((s)))
-            else
-             ZSH_CMD_TIME_COLOR="yellow"
-                 timer_show=$(printf '%02dm:%02ds' $((m)) $((s)))
-            fi
+        h=$(bc <<< "${timer_show}/3600") && m=$(bc <<< "(${timer_show}%3600)/60") && s=$(bc <<< "${timer_show}%60")
+        if [[ "$timer_show" -le 1 ]]; then ZSH_CMD_TIME_COLOR="magenta" && timer_show=$(printf '%.6f'" sec" "$timer_show")
+        elif [[ "$timer_show" -le 60 ]]; then ZSH_CMD_TIME_COLOR="green" && timer_show=$(printf '%.3f'" sec" "$timer_show")
+# '%.nf' defines the number of decimal places, where n is an integer. Values
+# above 14 are possible, but not useful, because the computer's internal
+# representation of floating point numbers has a limited number of bits and as
+# a consequence a limited accuracy. So numbers with floating point cannot be
+# stored as e.g. 3.0000000000 in memory, but as 3.0000000002 or 2.9999999998.
+# Rounding errors are therefore unavoidable and you can safely ignore everything
+# after the 14th decimal place in a result.
+        elif [[ "$timer_show" -gt 60 ]] && [[ "$timer_show" -le 180 ]]; then ZSH_CMD_TIME_COLOR="cyan" && timer_show=$(printf '%02dm:%02ds' $((m)) $((s)))
+        elif [[ "$h" -gt 0 ]]; then m=$((m%60)) && ZSH_CMD_TIME_COLOR="red" && timer_show=$(printf '%02dh:%02dm:%02ds' $((h)) $((m)) $((s))); else ZSH_CMD_TIME_COLOR="yellow" && timer_show=$(printf '%02dm:%02ds' $((m)) $((s)))
         fi
           elapsed=$(echo -e "%F{$ZSH_CMD_TIME_COLOR}$(printf '%s' "${ZSH_CMD_TIME_MSG}"" $timer_show")%f")
           export elapsed
+          RPS1='${elapsed} ${vcs_info_msg_0_} %(?.%F{green}√.%K{red}%F{black} Nope!)%f%k'
     fi
 }
 precmd_functions+=(_cmd_time_precmd)
 preexec_functions+=(_cmd_time_preexec)
 #
-# add the following line to your prompt definitions (probably in your .zshrc)
-#        RPS1='$elapsed %(?.%F{green}√.%K{red}%F{black} Nope!)%f%k'
