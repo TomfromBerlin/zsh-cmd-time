@@ -18,6 +18,12 @@
 # into your .zshrc, otherwise there will be only zeros as decimal places.      #
 #                                                                              #
 ################################################################################
+# Standardized $0 handling
+# (See https://zdharma-continuum.github.io/Zsh-100-Commits-Club/Zsh-Plugin-Standard.html)
+0="${ZERO:-${${0:#$ZSH_ARGZERO}:-${(%):-%N}}}"
+0="${${(M)0:#/*}:-$PWD/$0}"
+typeset -g _CMD_TIME_DIR="${0:A:h}"
+
 _cmd_time_preexec() {
   # check excluded
     [[ -n "$ZSH_CMD_TIME_EXCLUDE" ]] && for exc in $ZSH_CMD_TIME_EXCLUDE; do [ "$(echo "$1" | grep -c "$exc")" -gt 0 ] && RPS1='${vcs_info_msg_0_} %(?.%F{green}√.%K{red}%F{black} Nope!)%f%k' && return; done
