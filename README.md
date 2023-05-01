@@ -27,7 +27,7 @@ If you want to use zsh-cmd-time I recommend using [zplugin](/../../../../Tomfrom
 
 ```
 mkdir ~/.zplugin
-git clone https://github.com/psprint/zplugin.git ~/.zplugin/bin
+git clone https://github.com/TomfromBerlin/zplugin.git ~/.zplugin/bin
 ```
 and add `zplugin load TomfromBerlin/zsh-cmd-time` to your `.zshrc` to install the plugin.
 
