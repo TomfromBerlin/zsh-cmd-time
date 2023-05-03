@@ -4,7 +4,7 @@
 |-|-|
 
 ## Introduction
-
+<details>
 Actually, this is a fork of [zsh-command-time plugin](https://github.com/popstas/zsh-command-time) made by [Stanislav Popov](https://github.com/popstas), who honestly seems to be a much more talented developer than me.
 
 I created this fork because I wanted to have a display of the command execution time in my RPS1, but I do not want to use frameworks like antigen or powerlevel9k/p10k, although they are good and sophisticated frameworks for the Z shell.
@@ -12,22 +12,26 @@ I created this fork because I wanted to have a display of the command execution 
 After a while I thought it would be nice to have a display of fractions of seconds for short commands and I startet to search for a ready-to-use solution. I did not found any, so I created my own based on the [zsh-command-time plugin](https://github.com/popstas/zsh-command-time).
 
 When I was 53 commits ahead of [zsh-command-time plugin](https://github.com/popstas/zsh-command-time), the code between the two branches differed greatly and it would break [zsh-command-time plugin](https://github.com/popstas/zsh-command-time) if it were merged with my code. In addition, his repository no longer seems to be maintained, so I decided to decouple this repository from its origin and create a standalone repository. Nevertheless, popstas deserves most of the credits, because without his code, zsh-cmd-time would not exist at all.
+</details>
 
 ## What distinguish this fork from the original?
 
+<details>
 One is that the original is probably bash-compatible. Unfortunately, this is not possible with this repository without bloating the code. That is, this plugin runs only with the Z Shell without any problems.
 
 The orignal plugin, on the other hand, only displays whole seconds. This fork __can__ display fractions of seconds. It's up to you whether you want that or not.
 
 In addition, the original is somewhat easier to configure with regard to the color scheme and the output whether very short program execution times should be displayed.
+</details>
 
 ## Installation
 
+<details>
 If you want to use zsh-cmd-time I recommend using [zplugin](/../../../../TomfromBerlin/zplugin) to load this plugin. [zplugin](/../../../../TomfromBerlin/zplugin) is small and you have full control over which plugins to load. To install [zplugin](/../../../../TomfromBerlin/zplugin) perform the following steps:
 
 ```
 mkdir ~/.zplugin
-git clone https://github.com/TomfromBerlin/zplugin.git ~/.zplugin/bin
+git clone https://github.com/psprint/zplugin.git ~/.zplugin/bin
 ```
 and add `zplugin load TomfromBerlin/zsh-cmd-time` to your `.zshrc` to install the plugin.
 
@@ -44,8 +48,11 @@ Of course, you can use it in your PS1. At this point, it is quite helpful to hav
 
 _Other plugin managers / frameworks see [here](README.md#install-with-antigen)_
 
+</details>
+
 ### Description of zsh-cmd-time
 
+<details>
 `zsh-cmd-time` is a plugin that outputs the execution time of commands and exports the result to a variable that can be used elsewhere. It is similar to the built-in [REPORTTIME](http://zsh.sourceforge.net/Doc/Release/Parameters.html) function, but it is also slightly different.
 
 `REPORTTIME` is a nifty feature of zsh. If you set it to a non-negative value, then every time, any command you run that takes longer than the value you set it to in seconds, zsh will print usage statistics afterwards as if you had run the command prefixed with `time`. Well, almost every time.
@@ -59,9 +66,11 @@ As mentioned before `REPORTTIME` has been set to `REPORTTIME=3` (seconds) and on
 So if you want to monitor CPU-consuming commands only, you should use `REPORTTIME` instead of this plugin.
 
 _At this point, it is probably worth mentioning that the measured times do vary, especially with many decimal places, even if the same program is executed twice directly in succession. Well, the measurement is not done with a high precision clock, but with a computer with many different components of hardware and software, which can influence the results differently at different times. In addition, there are rounding errors, which are unavoidable due to the way floating point numbers are handled in a digital environment. For this reason, the measured times are to be understood rather as approximate values. If desired, it is recommended to perform a series of measurements from which an average value can then be calculated._
+</details>
 
 ## Configuration
 
+<details>
 You can override some defaults in `.zshrc`:
 
 ```zsh
@@ -76,6 +85,7 @@ ZSH_CMD_TIME_EXCLUDE=(vim nano ranger mc mcedit clear cls)
 
 ### Customization
 
+<details>
 You can customize the output of the plugin by redefining the zsh_command_time function. Here are two examples of custom definitions.
 
 The configuration below can handle floating point numbers and will display decimal places for short commands:
@@ -89,8 +99,11 @@ Longer execution times will be displayed as "mm:ss", or "hh:mm:ss" respectively.
 
 For output with decimal places you have to put `typeset -F SECONDS` into your .zshrc, otherwise there are only zeros as decimal places.
 
+</details>
+
 ### Output with colors
 
+<details>
 ```zsh
 zsh_cmd_time() {
     if [[ -n "$timer_show" ]]; then
@@ -125,8 +138,11 @@ You can change the colors, too. Just look for `"cyan"`, `"green"`, `"magenta"`, 
 |:-|
 | When using `print -P` in the right prompt of the Z shell with the above configuration, it happened that the output was severely out of place. Unfortunately, `print -P` moves the right prompt towards the center of the window and I haven't found a solution for this yet, except to replace `print -P` with `echo -e`. Maybe this is the only solution, who knows. I tried to fix it with `%{$elapsed%}`, but that moves RPS1 too much to the right and then causes an unwanted line break. So there is a mix of `echo -e` and `printf` on one line, which looks pretty stupid - but works and even [shellcheck](https://www.shellcheck.net/) do not complain. |
 
+</details>
+
 ### Output without colors
 
+<details>
 ```zsh
 zsh_cmd_time() {
     if [[ -n "$ZSH_CMD_TIME" ]]; then
@@ -143,12 +159,11 @@ zsh_cmd_time() {
     fi
 }
 ```
-Todo:
-- [x] Make sure that the plugin outputs fractions of a second (milliseconds) if the execution of a command takes less than 1.5 seconds. This way you will have a handy benchmark tool, even though it won't be very accurate. The output should be in a readable format.
-- [x] colored output depending on command execution time
-- [x] reset the execution time in the right prompt after running excluded commands; unfortunately after running an excluded command the execution time of the previous command remains in the right prompt (even with `setopt TRANSIENT_PROMPT`). So we set the right prompt for the case when a program or a command is excluded and separately for the opposite case. It is a dirty solution, but I haven't found a better way.
+</details>
+</details>
 
--------------------------------------------------------
+## Install with other plugin managers
+<details>
 
 ## Install with [antigen](/../../../../zsh-users/antigen)
 
@@ -175,3 +190,4 @@ powerlevel9k as of v0.6.0 has a [native segment of command_execution_time](/../.
 `POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status background_jobs vcs command_execution_time time)`
 
 And now have fun and be nice to each other.
+</details>
