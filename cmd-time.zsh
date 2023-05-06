@@ -18,21 +18,25 @@
 # into your .zshrc, otherwise there will be only zeros as decimal places.      #
 #                                                                              #
 ################################################################################
-
-# Redraw prompt when terminal size changes
-TRAPWINCH() { zle && zle -R }
-
 # Standardized $0 handling (See https://zdharma-continuum.github.io/Zsh-100-Commits-Club/Zsh-Plugin-Standard.html)
 0="${ZERO:-${${0:#$ZSH_ARGZERO}:-${(%):-%N}}}"
 0="${${(M)0:#/*}:-$PWD/$0}"
 typeset -g _CMD_TIME_DIR="${0:A:h}"
-
+# https://wiki.zshell.dev/community/zsh_plugin_standard#standard-plugins-hash
+typeset -gA Plugins
+Plugins[cmd-time]="${0:h}"
+# Redraw prompt when terminal size changes
+TRAPWINCH() {
+    zle && zle -R
+    }
 _cmd_time_preexec() {
   # check excluded
     [[ -n "$ZSH_CMD_TIME_EXCLUDE" ]] && for exc in $ZSH_CMD_TIME_EXCLUDE; do [ "$(echo "$1" | grep -c "$exc")" -gt 0 ] && RPS1='${vcs_info_msg_0_} %(?.%F{green}√.%K{red}%F{black} Nope!)%f%k' && return; done
     timer=${timer:-$SECONDS}; timer_show=""; export timer_show
     }
-_cmd_time_precmd() { [[ $timer ]] && timer_show=$(($SECONDS - $timer)) && export timer_show && zsh_cmd_time && unset timer }
+_cmd_time_precmd() {
+    [[ $timer ]] && timer_show=$(($SECONDS - $timer)) && export timer_show && zsh_cmd_time && unset timer
+    }
 zsh_cmd_time() {
     if [[ -n "$timer_show" ]]; then
 # we leave the handling of floating point numbers to bc --> https://www.gnu.org/software/bc/manual/html_mono/bc.html
