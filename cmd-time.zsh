@@ -3,12 +3,12 @@
 #                                                                              #
 #        Everything below this line comes with no warranty of any kind.        #
 #                     Use these file at your own risk!                         #
-#                                                                              #
+# last update: 05/08/2023                                                      #
 ################################################################################
 #                                                                              #
 # This plugin will overwrite your existing RPS1.                               #
-# You can avoid that by replacing the RPS1 definition in line 23 and           #
-# line 45 with your own.                                                       #
+# You can avoid that by replacing the RPS1 definition in line 36 and           #
+# line 60 with your own.                                                       #
 # For the output of the execution time you have to keep ${elapsed} in line 45. #
 #                                                                              #
 # for the output of decimal places you have to put                             #
@@ -20,8 +20,10 @@
 ################################################################################
 # Standardized $0 handling (See https://zdharma-continuum.github.io/Zsh-100-Commits-Club/Zsh-Plugin-Standard.html)
 0="${ZERO:-${${0:#$ZSH_ARGZERO}:-${(%):-%N}}}"
-0="${${(M)0:#/*}:-$PWD/$0}"
-typeset -g _CMD_TIME_DIR="${0:A:h}"
+# Set $0 with use of %x prompt expansion
+0="${ZERO:-${${${(M)${0::=${(%):-%x}}:#/*}:-$PWD/$0}:A}}"
+local ZERO="$0"
+typeset -g CMD_TIME_DIR="${0:A:h}"
 # https://wiki.zshell.dev/community/zsh_plugin_standard#standard-plugins-hash
 typeset -gA Plugins
 Plugins[cmd-time]="${0:h}"
