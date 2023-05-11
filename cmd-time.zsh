@@ -9,7 +9,7 @@
 # This plugin will overwrite your existing RPS1.                               #
 # You can avoid that by replacing the RPS1 definition in line 36 and           #
 # line 60 with your own.                                                       #
-# For the output of the execution time you have to keep ${elapsed} in line 45. #
+# For the output of the execution time you have to keep ${elapsed} in line 60. #
 #                                                                              #
 # for the output of decimal places you have to put                             #
 #                                                                              #
@@ -34,10 +34,14 @@ TRAPWINCH() {
 _cmd_time_preexec() {
   # check excluded
     [[ -n "$ZSH_CMD_TIME_EXCLUDE" ]] && for exc in $ZSH_CMD_TIME_EXCLUDE; do [ "$(echo "$1" | grep -c "$exc")" -gt 0 ] && RPS1='${vcs_info_msg_0_} %(?.%F{green}√.%K{red}%F{black} Nope!)%f%k' && return; done
-    timer=${timer:-$SECONDS}; timer_show=""; export timer_show
+    timer=${timer:-$SECONDS}
+    timer_show=""
+    export timer_show
     }
 _cmd_time_precmd() {
-    [[ $timer ]] && timer_show=$(($SECONDS - $timer)) && export timer_show && zsh_cmd_time && unset timer
+    [[ $timer ]] && timer_show=$(($SECONDS - $timer))
+    export timer_show && zsh_cmd_time
+    unset timer
     }
 zsh_cmd_time() {
     if [[ -n "$timer_show" ]]; then
