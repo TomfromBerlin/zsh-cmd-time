@@ -3,7 +3,7 @@
 | ![Views](https://img.shields.io/endpoint?color=green&label=Views&logoColor=red&style=plastic&url=https%3A%2F%2Fhits.dwyl.com%2FTomfromBerlin%2Fzsh-cmd-time) | ![Unique Viewers](https://img.shields.io/endpoint?color=green&label=Unique%20Viewers&logoColor=pink&style=plastic&url=https%3A%2F%2Fhits.dwyl.com%2FTomfromBerlin%2Fzsh-cmd-time%3Fshow%3Dunique) |
 |-|-|
 
-### Introduction
+## Introduction
 
 Actually, this is a fork of [zsh-command-time plugin](https://github.com/popstas/zsh-command-time) made by [Stanislav Popov](https://github.com/popstas), who honestly seems to be a much more talented developer than me.
 
@@ -23,6 +23,22 @@ The orignal plugin, on the other hand, only displays whole seconds. This fork __
 In addition, the original is somewhat easier to configure with regard to the color scheme and the output whether very short program execution times should be displayed.
 </details>
 
+## Description of zsh-cmd-time
+
+`zsh-cmd-time` is a plugin that outputs the execution time of commands and exports the result to a variable that can be used elsewhere. It is similar to the built-in [REPORTTIME](http://zsh.sourceforge.net/Doc/Release/Parameters.html) function, but it is also slightly different.
+
+`REPORTTIME` is a nifty feature of zsh. If you set it to a non-negative value, then every time, any command you run that takes longer than the value you set it to in seconds, zsh will print usage statistics afterwards as if you had run the command prefixed with `time`. Well, almost every time.
+
+The following screenshot shows two measurements, both with `REPORTTIME=3`, but `REPORTTIME` itself remains silent. The output would look like that of the second measurement but that comes from `time` command. (Just ignore the right prompt at this point.)
+
+![reporttime](https://user-images.githubusercontent.com/123265893/232536349-55ca37e6-7fdf-45dc-93bb-6a4cf9bcd14a.png)
+
+As mentioned before `REPORTTIME` has been set to `REPORTTIME=3` (seconds) and one would expect a response by `REPORTTIME`. However, `sleep` does not consume any CPU time and `REPORTTIME` does not recognize such idle commands. Here `zsh-cmd-time` comes into play. As you can see, the right prompt shows the execution time regardless of whether CPU time was consumed or not and this is the plugin at work.
+
+So if you want to monitor CPU-consuming commands only, you should use `REPORTTIME` instead of this plugin.
+
+_At this point, it is probably worth mentioning that the measured times do vary, especially with many decimal places, even if the same program is executed twice directly in succession. Well, the measurement is not done with a high precision clock, but with a computer with many different components of hardware and software, which can influence the results differently at different times. In addition, there are rounding errors, which are unavoidable due to the way floating point numbers are handled in a digital environment. For this reason, the measured times are to be understood rather as approximate values. If desired, it is recommended to perform a series of measurements from which an average value can then be calculated._
+
 ## Installation
 
 If you want to use zsh-cmd-time I recommend using [zplugin](/../../../../TomfromBerlin/zplugin) to load this plugin. [zplugin](/../../../../TomfromBerlin/zplugin) is small and you have full control over which plugins to load. To install [zplugin](/../../../../TomfromBerlin/zplugin) perform the following steps:
@@ -35,9 +51,25 @@ mkdir ~/.zplugin
 ```
 git clone https://github.com/TomfromBerlin/zplugin.git ~/.zplugin/bin
 ```
-and add `zplugin load TomfromBerlin/zsh-cmd-time` to your `.zshrc` to install the plugin.
+and add
+```
+source ~/.zplugin/bin/zplugin.zsh # should be called before compinit
+zmodload zsh/complist # should be called before compinit, the directory `zsh` should be in your $FPATH
+```
+before loading completion settings as well as
+```
+autoload -Uz compinit && compinit -C -d ${zdumpfile}
+zplugin cdreplay -q # -q is for quiet
+```
+after loading completion settings.
+
+Then add `zplugin load TomfromBerlin/zsh-cmd-time` to your `.zshrc` to install the cmd-time plugin. Best practice: place it before your prompt definitions.
+
+**For output with decimal places you have to put `typeset -F SECONDS` into your .zshrc, otherwise there are only zeros as decimal places.**
 
 Next time you start a terminal [zplugin](/../../../../TomfromBerlin/zplugin) downloads the plugin and compiles it with zcompile, giving your shell a noticeable performance boost.
+
+You may want to consider to run the script [zrecompile](/../../../../TomfromBerlin/mothers-little-helpers/blob/main/helpers/scripts/misc/zrecompile) to compile all the zsh-dot-files to give your shell another performance boost. A descrption of what the script does can be found within the source file. The line `autoload -Uz [$HOME]/path/to/script/zrecompile`, placed somewhere in your .zshcr, may be helpful when (re)running the script, e.g. after changing dot-files.
 
 **❗ This plugin will replace your RPS1 definition. To avoid this, remove the strings below and add ${elapsed} or ${timer_show} to your RPS1. ❗**
 
@@ -75,28 +107,10 @@ powerlevel9k as of v0.6.0 has a [native segment of command_execution_time](/../.
 
 `POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status background_jobs vcs command_execution_time time)`
 
-And now have fun and be nice to each other.
 </details>
 
-### Description of zsh-cmd-time
+## Configuration
 
-`zsh-cmd-time` is a plugin that outputs the execution time of commands and exports the result to a variable that can be used elsewhere. It is similar to the built-in [REPORTTIME](http://zsh.sourceforge.net/Doc/Release/Parameters.html) function, but it is also slightly different.
-
-`REPORTTIME` is a nifty feature of zsh. If you set it to a non-negative value, then every time, any command you run that takes longer than the value you set it to in seconds, zsh will print usage statistics afterwards as if you had run the command prefixed with `time`. Well, almost every time.
-
-The following screenshot shows two measurements, both with `REPORTTIME=3`, but `REPORTTIME` itself remains silent. The output would look like that of the second measurement but that comes from `time` command. (Just ignore the right prompt at this point.)
-
-![reporttime](https://user-images.githubusercontent.com/123265893/232536349-55ca37e6-7fdf-45dc-93bb-6a4cf9bcd14a.png)
-
-As mentioned before `REPORTTIME` has been set to `REPORTTIME=3` (seconds) and one would expect a response by `REPORTTIME`. However, `sleep` does not consume any CPU time and `REPORTTIME` does not recognize such idle commands. Here `zsh-cmd-time` comes into play. As you can see, the right prompt shows the execution time regardless of whether CPU time was consumed or not and this is the plugin at work.
-
-So if you want to monitor CPU-consuming commands only, you should use `REPORTTIME` instead of this plugin.
-
-_At this point, it is probably worth mentioning that the measured times do vary, especially with many decimal places, even if the same program is executed twice directly in succession. Well, the measurement is not done with a high precision clock, but with a computer with many different components of hardware and software, which can influence the results differently at different times. In addition, there are rounding errors, which are unavoidable due to the way floating point numbers are handled in a digital environment. For this reason, the measured times are to be understood rather as approximate values. If desired, it is recommended to perform a series of measurements from which an average value can then be calculated._
-
-### Configuration
-
-<details><summary>...</summary>
 You can override some defaults in `.zshrc`:
 
 ```zsh
@@ -109,9 +123,8 @@ ZSH_CMD_TIME_EXCLUDE=(vim nano ranger mc mcedit clear cls)
 
 ```
 
-#### Customization
+### Customization
 
-<details><summary>...</summary>
 You can customize the output of the plugin by redefining the zsh_command_time function. Here are two examples of custom definitions.
 
 The configuration below can handle floating point numbers and will display decimal places for short commands:
@@ -122,8 +135,6 @@ The configuration below can handle floating point numbers and will display decim
 _Have a look at the code snippet for explanation how to change the number of the decimal places._
 
 Longer execution times will be displayed as "mm:ss", or "hh:mm:ss" respectively. When execution time is above 60 seconds, neither milliseconds nor nanoseconds are displayed.
-
-For output with decimal places you have to put `typeset -F SECONDS` into your .zshrc, otherwise there are only zeros as decimal places.
 
 #### Output with colors
 
@@ -136,7 +147,7 @@ zsh_cmd_time() {
         if [[ "$timer_show" -le 1 ]]; then ZSH_CMD_TIME_COLOR="magenta" && timer_show=$(printf '%.6f'" sec" "$timer_show")
         elif [[ "$timer_show" -le 60 ]]; then ZSH_CMD_TIME_COLOR="green" && timer_show=$(printf '%.3f'" sec" "$timer_show")
 # '%.nf' defines the number of decimal places, where n is an integer. Values
-# above 14 are possible, but not useful, because the computer's internal
+# above 14 are possible, but not useful, because computers internal
 # representation of floating point numbers has a limited number of bits and as
 # a consequence a limited accuracy. So numbers with floating point cannot be
 # stored as e.g. 3.0000000000 in memory, but as 3.0000000002 or 2.9999999998.
@@ -161,7 +172,7 @@ You can change the colors, too. Just look for `"cyan"`, `"green"`, `"magenta"`, 
 
 | Annotation |
 |:-|
-| When using `print -P` in the right prompt of the Z shell with the above configuration, it happened that the output was severely out of place. Unfortunately, `print -P` moves the right prompt towards the center of the window and I haven't found a solution for this yet, except to replace `print -P` with `echo -e`. Maybe this is the only solution, who knows. I tried to fix it with `%{$elapsed%}`, but that moves RPS1 too much to the right and then causes an unwanted line break. So there is a mix of `echo -e` and `printf` on one line, which looks pretty stupid - but works and even [shellcheck](https://www.shellcheck.net/) do not complain. |
+| When using `print -P` in the right prompt of the Z shell with the above configuration, it happened that the output was severely out of place. Unfortunately, `print -P` moves the right prompt towards the center of the window and I haven not found a solution for this yet, except to replace `print -P` with `echo -e`. Maybe this is the only solution, who knows. I tried to fix it with `%{$elapsed%}`, but that moves RPS1 too much to the right and then causes an unwanted line break. So there is a mix of `echo -e` and `printf` on one line, which looks pretty stupid - but works and even [shellcheck](https://www.shellcheck.net/) do not complain. |
 
 #### Output without colors
 
@@ -181,4 +192,5 @@ zsh_cmd_time() {
     fi
 }
 ```
-</details>
+
+_And now have fun and be nice to each other._
