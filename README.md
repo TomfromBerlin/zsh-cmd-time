@@ -11,7 +11,7 @@ Actually, this is a fork of [zsh-command-time plugin](https://github.com/popstas
 
 I created this fork because I wanted to have a display of the command execution time in my RPS1, but I do not want to use frameworks like antigen or powerlevel9k/p10k, although they are good and sophisticated frameworks for the Z shell.
 
-After a while I thought it would be nice to have a display of fractions of seconds for short commands and I startet to search for a ready-to-use solution. I did not found any, so I created my own based on the [zsh-command-time plugin](https://github.com/popstas/zsh-command-time).
+After a while I thought it would be nice to have a display of fractions of seconds for short commands, so I created my own based on the [zsh-command-time plugin](https://github.com/popstas/zsh-command-time).
 
 When I was 53 commits ahead of [zsh-command-time plugin](https://github.com/popstas/zsh-command-time), the code between the two branches differed greatly and it would break [zsh-command-time plugin](https://github.com/popstas/zsh-command-time) if it were merged with my code. In addition, his repository no longer seems to be maintained, so I decided to decouple this repository from its origin and create a standalone repository. Nevertheless, popstas deserves most of the credits, because without his code, zsh-cmd-time would not exist at all.
 
@@ -43,33 +43,38 @@ _At this point, it is probably worth mentioning that the measured times do vary,
 
 ## Installation
 
-If you want to use zsh-cmd-time I recommend using [zplugin](/../../../../TomfromBerlin/zplugin) to load this plugin. [zplugin](/../../../../TomfromBerlin/zplugin) is small and you have full control over which plugins to load. To install [zplugin](/../../../../TomfromBerlin/zplugin) perform the following steps:
+My first recommendation is: don't use a plugin manager or framework at all if you only want to use a few plugins to improve your daily zsh experience. Instead you can use [zsh_unplugged](/../../../../TomfromBerlin/zsh_unplugged). zsh_unplugged just contains around 20 lines of code. All you need is adding a few lines to your .zshrc-file:
 
-```
-mkdir ~/.zplugin
-```
-~git~ ~clone~ ~https://github.com/psprint/zplugin.git~ ~/.zplugin/bin~ (The original "zplugin" plugin manager repository no longer exists, but you can use my fork. Be aware that there is no support for "zplugin". I may switch to another plugin manager in the future, e.g. zgenom.)
-
-```
-git clone https://github.com/TomfromBerlin/zplugin.git ~/.zplugin/bin
-```
-and add
-```
-source ~/.zplugin/bin/zplugin.zsh # should be called before compinit
-zmodload zsh/complist # should be called before compinit, the directory `zsh` should be in your $FPATH
-```
-before loading completion settings as well as
-```
-autoload -Uz compinit && compinit -C -d ${zdumpfile}
-zplugin cdreplay -q # -q is for quiet
-```
-after loading completion settings.
-
-Then add `zplugin load TomfromBerlin/zsh-cmd-time` to your `.zshrc` to install the cmd-time plugin. Best practice: place it before your prompt definitions.
+<details><summary>Code</summary>
+    
+    ```
+    # ZSH UNPLUGGED start (first part)
+    # where do you want to store your plugins?
+    ZPLUGINDIR=${ZDOTDIR:-~/.config/zsh}/plugins
+    # get zsh_unplugged and store it with your other plugins
+    if [[ ! -d $ZPLUGINDIR/zsh_unplugged ]]; then
+      git clone --quiet https://github.com/mattmc3/zsh_unplugged $ZPLUGINDIR/zsh_unplugged
+    fi
+    source $ZPLUGINDIR/zsh_unplugged/zsh_unplugged.zsh
+    
+    # make list of the Zsh plugins you use (the order of the list can be important, it depends on the plugins used)
+    repos=(
+        $ZPLUGINDIR/zsh-enhanced-completion # this is a local plugin
+        TomfromBerlin/zsh-cmd-time # this plugun will be cloned from Github
+        )
+    # ZSH UNPLUGGED end (first part)
+    ```
+    
+    and before `autoload -Uz promptinit && promptinit`, add
+    
+    ```
+    # ZSH UNPLUGGED start (second part)
+    plugin-load $repos
+    # ZSH UNPLUGGED end (second part)
+    ```
+</details>
 
 **For output with decimal places you have to put `typeset -F SECONDS` into your .zshrc, otherwise there are only zeros as decimal places.**
-
-Next time you start a terminal [zplugin](/../../../../TomfromBerlin/zplugin) downloads the plugin and compiles it with zcompile, giving your shell a noticeable performance boost.
 
 You may want to consider to run the script [zrecompile](/../../../../TomfromBerlin/mothers-little-helpers/blob/main/helpers/scripts/misc/zrecompile) to compile all the zsh-dot-files to give your shell another performance boost. A descrption of what the script does can be found within the source file. The line `autoload -Uz [$HOME]/path/to/script/zrecompile`, placed somewhere in your .zshcr, may be helpful when (re)running the script, e.g. after changing dot-files.
 
@@ -83,7 +88,37 @@ RPS1='${elapsed} %(?.%F{green}√.%K{red}%F{black} Nope!)%f%k'
 Of course, you can use it in your PS1. At this point, it is quite helpful to have a little knowledge about how to customize the prompt. If you only want to see the execution time without prefixed text you can use the `timer_show` variable.
 
 ### Install with other plugin managers/frameworks
-<details><summary>...</summary>
+
+<details><summary>show instructions</summary>
+    
+#### [zplugin](/../../../../TomfromBerlin/zplugin)
+
+This is the second best recommendation I can give. Zplugin is relatively fast and offers a few convenient functions around plugin management.
+
+At first you need to install [zplugin](/../../../../TomfromBerlin/zplugin). To do this perform the following steps:
+
+```
+mkdir ~/.zplugin
+git clone https://github.com/TomfromBerlin/zplugin.git ~/.zplugin/bin # The original "zplugin" plugin manager repository no longer exists. Be aware that there is no support for "zplugin".
+```
+
+and add
+
+```
+source ~/.zplugin/bin/zplugin.zsh # should be called before compinit
+zmodload zsh/complist # should be called before compinit, the directory `zsh` should be in your $FPATH
+```
+
+before loading completion settings as well as
+
+```
+autoload -Uz compinit && compinit -C -d ${zdumpfile}
+zplugin cdreplay -q # -q is for quiet
+```
+
+after loading completion settings.
+
+Then add `zplugin load TomfromBerlin/zsh-cmd-time` to your `.zshrc` to install the cmd-time plugin. Best practice: place it before your prompt definitions. Next time you start a terminal [zplugin](/../../../../TomfromBerlin/zplugin) downloads the plugin and compiles it with zcompile, giving your shell a noticeable performance boost.
 
 #### Install with [antigen](/../../../../zsh-users/antigen)
 
@@ -113,21 +148,19 @@ powerlevel9k as of v0.6.0 has a [native segment of command_execution_time](/../.
 
 ## Configuration
 
-You can override some defaults in `.zshrc`:
+You do not need to configure the plugin. It should run out of the box. But you can override some defaults in `.zshrc`:
 
 ```zsh
-
 # Pefixed message to display (set to "" for disable).
 ZSH_CMD_TIME_MSG="took %s"
 
-# Exclude some commands (doesn't work well)
-ZSH_CMD_TIME_EXCLUDE=(vim nano ranger mc mcedit clear cls)
-
+# Exclude some commands
+ZSH_CMD_TIME_EXCLUDE=(clear cls man mc mcedit nano ranger vim)
 ```
 
 ### Customization
 
-You can customize the output of the plugin by redefining the zsh_command_time function. Here are two examples of custom definitions.
+You can also customize the output of the plugin by redefining the zsh_command_time function. Here are two examples of custom definitions.
 
 The configuration below can handle floating point numbers and will display decimal places for short commands:
 
@@ -138,23 +171,15 @@ _Have a look at the code snippet for explanation how to change the number of the
 
 Longer execution times will be displayed as "mm:ss", or "hh:mm:ss" respectively. When execution time is above 60 seconds, neither milliseconds nor nanoseconds are displayed.
 
-#### Output with colors
+#### Output with colors (default configuration)
 
 ```zsh
-
 zsh_cmd_time() {
     if [[ -n "$timer_show" ]]; then
 # we leave the handling of floating point numbers to bc --> https://www.gnu.org/software/bc/manual/html_mono/bc.html
         h=$(bc <<< "${timer_show}/3600") && m=$(bc <<< "(${timer_show}%3600)/60") && s=$(bc <<< "${timer_show}%60")
         if [[ "$timer_show" -le 1 ]]; then ZSH_CMD_TIME_COLOR="magenta" && timer_show=$(printf '%.6f'" sec" "$timer_show")
         elif [[ "$timer_show" -le 60 ]]; then ZSH_CMD_TIME_COLOR="green" && timer_show=$(printf '%.3f'" sec" "$timer_show")
-# '%.nf' defines the number of decimal places, where n is an integer. Values
-# above 14 are possible, but not useful, because computers internal
-# representation of floating point numbers has a limited number of bits and as
-# a consequence a limited accuracy. So numbers with floating point cannot be
-# stored as e.g. 3.0000000000 in memory, but as 3.0000000002 or 2.9999999998.
-# Rounding errors are therefore unavoidable and you can safely ignore everything
-# after the 14th decimal place in a result.
         elif [[ "$timer_show" -gt 60 ]] && [[ "$timer_show" -le 180 ]]; then ZSH_CMD_TIME_COLOR="cyan" && timer_show=$(printf '%02dm:%02ds' $((m)) $((s)))
         elif [[ "$h" -gt 0 ]]; then m=$((m%60)) && ZSH_CMD_TIME_COLOR="red" && timer_show=$(printf '%02dh:%02dm:%02ds' $((h)) $((m)) $((s))); else ZSH_CMD_TIME_COLOR="yellow" && timer_show=$(printf '%02dm:%02ds' $((m)) $((s)))
         fi
@@ -163,7 +188,6 @@ zsh_cmd_time() {
           RPS1='${elapsed} ${vcs_info_msg_0_} %(?.%F{green}√.%K{red}%F{black} Nope!)%f%k'
     fi
 }
-
 ```
 
 The output on the right prompt in the Z shell looks like this:
@@ -188,9 +212,9 @@ zsh_cmd_time() {
         elif [[ "$h" -gt 0 ]]; then m=$((m%60)) && timer_show=$(printf '%dh:%02dm:%02ds' $((h)) $((m)) $((s)))
         else timer_show=$(printf '%02dm:%02ds' $((m)) $((s)))
         fi
-          elapsed=$(printf '%s' "${ZSH_CMD_TIME_MSG}"" $timer_show")
-          export elapsed
-          RPS1='${elapsed} ${vcs_info_msg_0_} %(?.%F{green}√.%K{red}%F{black} Nope!)%f%k'
+        elapsed=$(printf '%s' "${ZSH_CMD_TIME_MSG}"" $timer_show")
+        export elapsed
+        RPS1='${elapsed} ${vcs_info_msg_0_} %(?.%F{green}√.%K{red}%F{black} Nope!)%f%k'
     fi
 }
 ```
