@@ -157,6 +157,14 @@ ZSH_CMD_TIME_MSG="took %s"
 # Exclude some commands
 ZSH_CMD_TIME_EXCLUDE=(clear cls man mc mcedit nano ranger vim)
 ```
+If you want to have a ⏳-symbol instead of text in front of the execution time you can use the following syntax:
+
+```zsh
+ZSH_CMD_TIME_MSG="\uF253$s %s"
+
+```
+
+However, you need to install [Symbols Nerd Font Mono](https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.1/NerdFontsSymbolsOnly.zip) or [DroidSansMono Nerd Font](https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.1/DroidSansMono.zip) for this. The [Nerdfonts Cheat Sheet](https://www.nerdfonts.com/cheat-sheet) can be used to find your desired icon (e.g., search for "hour"). The site then also provides the corresponding UTF-16 code.
 
 ### Customization
 
