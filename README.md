@@ -148,7 +148,7 @@ powerlevel9k as of v0.6.0 has a [native segment of command_execution_time](/../.
 
 ## Configuration
 
-You do not need to configure the plugin. It should run out of the box, provided that `typeset -F SECONDS` has already been declared. Otherwise, this must still be done. The following statements must be declared after `typeset -F SECONDS`, if you want to override some defaults in `.zshrc`:
+You do not need to configure the plugin. It should run out of the box., You can override some defaults in `.zshrc`:
 
 ```zsh
 # Pefixed message to display (set to "" for disable).
