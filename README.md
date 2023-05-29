@@ -148,7 +148,7 @@ powerlevel9k as of v0.6.0 has a [native segment of command_execution_time](/../.
 
 ## Configuration
 
-You do not need to configure the plugin. It should run out of the box. But you can override some defaults in `.zshrc`:
+You do not need to configure the plugin. It should run out of the box, provided that `typeset -F SECONDS` has already been declared. Otherwise, this must still be done. The following statements must be declared after `typeset -F SECONDS`, if you want to override some defaults in `.zshrc`:
 
 ```zsh
 # Pefixed message to display (set to "" for disable).
@@ -157,7 +157,7 @@ ZSH_CMD_TIME_MSG="took %s"
 # Exclude some commands
 ZSH_CMD_TIME_EXCLUDE=(clear cls man mc mcedit nano ranger vim)
 ```
-If you want to have a ⏳-symbol instead of text in front of the execution time you can use the following syntax:
+If you want to have an hourglass ⌛ instead of text in front of the execution time you can use the following syntax:
 
 ```zsh
 ZSH_CMD_TIME_MSG="\uF253$s %s"
