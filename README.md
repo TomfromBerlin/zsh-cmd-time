@@ -74,8 +74,6 @@ My first recommendation is: don't use a plugin manager or framework at all if yo
     ```
 </details>
 
-**For output with decimal places you have to put `typeset -F SECONDS` into your .zshrc, otherwise there are only zeros as decimal places.**
-
 You may want to consider to run the script [zrecompile](/../../../../TomfromBerlin/mothers-little-helpers/blob/main/helpers/scripts/misc/zrecompile) to compile all the zsh-dot-files to give your shell another performance boost. A descrption of what the script does can be found within the source file. The line `autoload -Uz [$HOME]/path/to/script/zrecompile`, placed somewhere in your .zshcr, may be helpful when (re)running the script, e.g. after changing dot-files.
 
 **❗ This plugin will replace your RPS1 definition. To avoid this, remove the strings below and add ${elapsed} or ${timer_show} to your RPS1. ❗**
