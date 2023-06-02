@@ -27,7 +27,6 @@ typeset -g CMD_TIME_DIR="${0:A:h}"
 # https://wiki.zshell.dev/community/zsh_plugin_standard#standard-plugins-hash
 typeset -gA Plugins
 Plugins[cmd-time]="${0:h}"
-typeset -F SECONDS
 # Redraw prompt when terminal size changes
 TRAPWINCH() {
     zle && zle -R
