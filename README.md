@@ -11,9 +11,7 @@ Actually, this is a fork of [zsh-command-time plugin](https://github.com/popstas
 
 I created this fork because I wanted to have a display of the command execution time in my RPS1, but I do not want to use frameworks like antigen or powerlevel9k/p10k, although they are good and sophisticated frameworks for the Z shell.
 
-After a while I thought it would be nice to have a display of fractions of seconds for short commands, so I created my own based on the [zsh-command-time plugin](https://github.com/popstas/zsh-command-time).
-
-When I was 53 commits ahead of [zsh-command-time plugin](https://github.com/popstas/zsh-command-time), the code between the two branches differed greatly and it would break [zsh-command-time plugin](https://github.com/popstas/zsh-command-time) if it were merged with my code. In addition, his repository no longer seems to be maintained, so I decided to decouple this repository from its origin and create a standalone repository. Nevertheless, popstas deserves most of the credits, because without his code, zsh-cmd-time would not exist at all.
+After playing around with the code the two branches started to differ greatly and it would break [zsh-command-time plugin](https://github.com/popstas/zsh-command-time) if it were merged with my code. In addition, his repository no longer seems to be maintained, so I decided to detach this repository from its origin and create a standalone repository. Nevertheless, popstas deserves most of the credits, because without his code, zsh-cmd-time would not exist at all.
 
 #### What distinguish this fork from the original?
 
