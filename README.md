@@ -171,26 +171,27 @@ The configuration below can handle floating point numbers and will display decim
 - 6 decimal places when exec time is < 1 second
 - 3 decimal places when exec time is between 1 second and 60 seconds
 
-_Have a look at the code snippet for explanation how to change the number of the decimal places._
+_'%.nf' defines the number of decimal places, where n is an integer. However, the computer's internal representation of floating point numbers has a limited number of bits and as a consequence a limited accuracy. So numbers with floating point cannot be stored as e.g. 3.0000000000 in memory, but as 3.0000000002 or 2.9999999998. Rounding errors are therefore unavoidable._
 
 Longer execution times will be displayed as "mm:ss", or "hh:mm:ss" respectively. When execution time is above 60 seconds, neither milliseconds nor nanoseconds are displayed.
 
 #### Output with colors (default configuration)
 
 ```zsh
-zsh_cmd_time() {
-    if [[ -n "$timer_show" ]]; then
-# we leave the handling of floating point numbers to bc --> https://www.gnu.org/software/bc/manual/html_mono/bc.html
-        h=$(bc <<< "${timer_show}/3600") && m=$(bc <<< "(${timer_show}%3600)/60") && s=$(bc <<< "${timer_show}%60")
-        if [[ "$timer_show" -le 1 ]]; then ZSH_CMD_TIME_COLOR="magenta" && timer_show=$(printf '%.6f'" sec" "$timer_show")
-        elif [[ "$timer_show" -le 60 ]]; then ZSH_CMD_TIME_COLOR="green" && timer_show=$(printf '%.3f'" sec" "$timer_show")
-        elif [[ "$timer_show" -gt 60 ]] && [[ "$timer_show" -le 180 ]]; then ZSH_CMD_TIME_COLOR="cyan" && timer_show=$(printf '%02dm:%02ds' $((m)) $((s)))
+zsh_command_time() {
+  if [ -n "$ZSH_COMMAND_TIME" ]; then
+  h=$(bc -l <<< $ZSH_COMMAND_TIME/3600)
+  m=$(bc -l <<< $ZSH_COMMAND_TIME%3600/60)
+  s=$(bc -l <<< $ZSH_COMMAND_TIME%60)
+  if [[ "$timer_show" -le "1" ]]; then ZSH_CMD_TIME_COLOR="magenta" && timer_show=$(printf '%.6f'" sec" "$timer_show")
+        elif [[ "$timer_show" -le "60" ]]; then ZSH_CMD_TIME_COLOR="green" && timer_show=$(printf '%.3f'" sec" "$timer_show")
+        elif [[ "$timer_show" -gt "60" ]] && [[ "$timer_show" -le "180" ]]; then ZSH_CMD_TIME_COLOR="cyan" && timer_show=$(printf '%02dm:%02ds' $((m)) $((s)))
         elif [[ "$h" -gt 0 ]]; then m=$((m%60)) && ZSH_CMD_TIME_COLOR="red" && timer_show=$(printf '%02dh:%02dm:%02ds' $((h)) $((m)) $((s))); else ZSH_CMD_TIME_COLOR="yellow" && timer_show=$(printf '%02dm:%02ds' $((m)) $((s)))
         fi
-          elapsed=$(echo -e "%F{$ZSH_CMD_TIME_COLOR}$(printf '%s' "${ZSH_CMD_TIME_MSG}"" $timer_show")%f")
-          export elapsed
-          RPS1='${elapsed} ${vcs_info_msg_0_} %(?.%F{green}√.%K{red}%F{black} Nope!)%f%k'
-    fi
+    elapsed=$(echo -e "%F{$ZSH_CMD_TIME_COLOR}$(printf '%s' "${ZSH_CMD_TIME_MSG}"" $timer_show")%f")
+    export elapsed
+    RPS1='${elapsed} ${vcs_info_msg_0_} %(?.%F{green}√.%K{red}%F{black} Nope!)%f%k'
+  fi
 }
 ```
 
@@ -202,7 +203,7 @@ You can change the colors, too. Just look for `"cyan"`, `"green"`, `"magenta"`, 
 
 | Annotation |
 |:-|
-| When using `print -P` in the right prompt of the Z shell with the above configuration, it happened that the output was severely out of place. Unfortunately, `print -P` moves the right prompt towards the center of the window and I haven not found a solution for this yet, except to replace `print -P` with `echo -e`. Maybe this is the only solution, who knows. I tried to fix it with `%{$elapsed%}`, but that moves RPS1 too much to the right and then causes an unwanted line break. So there is a mix of `echo -e` and `printf` on one line, which looks pretty stupid - but works and even [shellcheck](https://www.shellcheck.net/) do not complain. |
+| When using `print -P` in the right prompt of the Z shell with the above configuration, it happened that the output was severely out of place. Unfortunately, `print -P` moves the right prompt towards the center of the window and I have not found a solution for this yet, except to replace `print -P` with `echo -e`. Maybe this is the only solution, who knows. I tried to fix it with `%{$elapsed%}`, but that moves RPS1 too much to the right and then causes an unwanted line break. So there is a mix of `echo -e` and `printf` on one line, which looks pretty stupid - but works and even [shellcheck](https://www.shellcheck.net/) do not complain. |
 
 #### Output without colors
 
