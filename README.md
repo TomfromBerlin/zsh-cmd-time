@@ -72,8 +72,6 @@ My first recommendation is: don't use a plugin manager or framework at all if yo
     ```
 </details>
 
-You may want to consider to run the script [zrecompile](/../../../../TomfromBerlin/mothers-little-helpers/blob/main/helpers/scripts/misc/zrecompile) to compile all the zsh-dot-files to give your shell another performance boost. A descrption of what the script does can be found within the source file. The line `autoload -Uz [$HOME]/path/to/script/zrecompile`, placed somewhere in your .zshcr, may be helpful when (re)running the script, e.g. after changing dot-files.
-
 **❗ This plugin will replace your RPS1 definition. To avoid this, remove the strings below and add ${elapsed} or ${timer_show} to your RPS1. ❗**
 
 ```zsh
@@ -82,6 +80,8 @@ RPS1='${elapsed} %(?.%F{green}√.%K{red}%F{black} Nope!)%f%k'
 ```
 
 Of course, you can use it in your PS1. At this point, it is quite helpful to have a little knowledge about how to customize the prompt. If you only want to see the execution time without prefixed text you can use the `timer_show` variable.
+
+You may want to consider to run the script [zrecompile](/../../../../TomfromBerlin/mothers-little-helpers/blob/main/helpers/scripts/misc/zrecompile) to compile all the zsh-dot-files to give your shell another performance boost. A descrption of what the script does can be found within the source file. The line `autoload -Uz [$HOME]/path/to/script/zrecompile`, placed somewhere in your .zshcr, may be helpful when (re)running the script, e.g. after changing dot-files.
 
 ### Install with other plugin managers/frameworks
 
@@ -93,21 +93,21 @@ This is the second best recommendation I can give. Zplugin is relatively fast an
 
 At first you need to install [zplugin](/../../../../TomfromBerlin/zplugin). To do this perform the following steps:
 
-```
+```zsh
 mkdir ~/.zplugin
 git clone https://github.com/TomfromBerlin/zplugin.git ~/.zplugin/bin # The original "zplugin" plugin manager repository no longer exists. Be aware that there is no support for "zplugin".
 ```
 
 and add
 
-```
+```zsh
 source ~/.zplugin/bin/zplugin.zsh # should be called before compinit
 zmodload zsh/complist # should be called before compinit, the directory `zsh` should be in your $FPATH
 ```
 
 before loading completion settings as well as
 
-```
+```zsh
 autoload -Uz compinit && compinit -C -d ${zdumpfile}
 zplugin cdreplay -q # -q is for quiet
 ```
