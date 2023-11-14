@@ -38,6 +38,7 @@ _cmd_time_preexec() {
     export timer_show
     }
 _cmd_time_precmd() {
+    timer_show=""
     [[ $timer ]] && timer_show=$(($SECONDS - $timer))
     export timer_show && zsh_cmd_time
     unset timer
