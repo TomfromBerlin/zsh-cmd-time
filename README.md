@@ -89,7 +89,7 @@ You may want to consider to run the script [zrecompile](/../../../../TomfromBerl
     
 #### [zplugin](/../../../../TomfromBerlin/zplugin)
 
-This is the second best recommendation I can give. Zplugin is relatively fast and offers a few convenient functions around plugin management.
+Zplugin offers a few convenient functions around plugin management.
 
 At first you need to install [zplugin](/../../../../TomfromBerlin/zplugin). To do this perform the following steps:
 
