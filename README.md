@@ -3,8 +3,8 @@ Even though it's been a while since the last updates, the repo is still maintain
 
 # zsh-cmd-time
 
-| ![Views](https://img.shields.io/endpoint?color=green&label=Views&logoColor=red&style=plastic&url=https%3A%2F%2Fhits.dwyl.com%2FTomfromBerlin%2Fzsh-cmd-time) | ![Unique Viewers](https://img.shields.io/endpoint?color=green&label=Unique%20Viewers&logoColor=pink&style=plastic&url=https%3A%2F%2Fhits.dwyl.com%2FTomfromBerlin%2Fzsh-cmd-time%3Fshow%3Dunique) | ![https://img.shields.io/github/license/TomfromBerlin/zsh-cmd-time?style=plastic](https://img.shields.io/github/license/TomfromBerlin/zsh-cmd-time?style=plastic)| ![https://img.shields.io/github/v/release/TomfromBerlin/zsh-cmd-time?include_prereleases&style=plastic](https://img.shields.io/github/v/release/TomfromBerlin/zsh-cmd-time?include_prereleases&style=plastic) |
-|-|-|-|-|
+![https://img.shields.io/github/license/TomfromBerlin/zsh-cmd-time?style=plastic](https://img.shields.io/github/license/TomfromBerlin/zsh-cmd-time?style=plastic)| ![https://img.shields.io/github/v/release/TomfromBerlin/zsh-cmd-time?include_prereleases&style=plastic](https://img.shields.io/github/v/release/TomfromBerlin/zsh-cmd-time?include_prereleases&style=plastic) |
+|-|-|
 
 ![zsh-cmd-time_test](https://github.com/TomfromBerlin/zsh-cmd-time/assets/123265893/622a5f14-e2e0-40a1-9a6a-58a91d142d5c)
 
