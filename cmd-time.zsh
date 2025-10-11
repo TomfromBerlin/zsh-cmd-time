@@ -2,7 +2,7 @@
 #                                                                              #
 #        Everything below this line comes with no warranty of any kind.        #
 #                     Use these file at your own risk!                         #
-# last update: 07/2023                                                         #
+# last update: 10/2025                                                         #
 ################################################################################
 #                                                                              #
 # This plugin will overwrite your existing RPS1.                               #
@@ -16,6 +16,10 @@
 #                                                                              #
 # into your .zshrc, otherwise there will be only zeros as decimal places.      #
 #                                                                              #
+# You also may add the following line to the config-section                    #
+# in your .zhrc-file:                                                          #
+#             : ${CMD_TIME_EXCLUDE:="^(ls|cd|pwd|clear|exit)$"}                #
+#                                                                              #
 ################################################################################
 # Standardized $0 handling (See https://zdharma-continuum.github.io/Zsh-100-Commits-Club/Zsh-Plugin-Standard.html)
 0="${ZERO:-${${0:#$ZSH_ARGZERO}:-${(%):-%N}}}"
@@ -26,6 +30,26 @@ typeset -g CMD_TIME_DIR="${0:A:h}"
 # https://wiki.zshell.dev/community/zsh_plugin_standard#standard-plugins-hash
 typeset -gA Plugins
 Plugins[cmd-time]="${0:h}"
+
+autoload -Uz is-at-least
+if ! is-at-least 5.0.5; then
+    print -P "%F{red}Error: zsh-cmd-time requires Zsh >= 5.0.5%f" >&2
+    print -P "%F{yellow}(Need EPOCHREALTIME support)%f" >&2
+    return 1
+fi
+
+# Load hook system
+autoload -Uz add-zsh-hook
+# Register hooks
+if ! add-zsh-hook preexec _cmd_time_preexec; then
+    print -P "%F{red}Error: Failed to register preexec hook%f" >&2
+    return 1
+fi
+if ! add-zsh-hook precmd _cmd_time_precmd; then
+    print -P "%F{red}Error: Failed to register precmd hook%f" >&2
+    return 1
+fi
+
 # Redraw prompt when terminal size changes
 TRAPWINCH() {
     zle && zle -R
@@ -66,4 +90,20 @@ zsh_cmd_time() {
 }
 precmd_functions+=(_cmd_time_precmd)
 preexec_functions+=(_cmd_time_preexec)
-#
+
+zsh_cmd_time_unload() {
+    # Remove hooks
+    add-zsh-hook -d preexec _cmd_time_preexec
+    add-zsh-hook -d precmd _cmd_time_precmd
+    
+    # Unset functions
+    unfunction _cmd_time_preexec _cmd_time_precmd _cmd_time_format
+    unfunction zsh_cmd_time_unload
+    
+    # Unset variables
+    unset CMD_TIME_{THRESHOLD,EXCLUDE,COLOR_FAST,COLOR_MEDIUM,COLOR_SLOW}
+    unset CMD_TIME_THRESHOLD_{MEDIUM,SLOW}
+    unset _ZSH_CMD_TIME_LOADED
+    unset cmd_start_time cmd_time_display
+}
+
