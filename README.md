@@ -4,6 +4,7 @@
   <img src="https://img.shields.io/badge/platform-Linux%20%7C%20macOS%20%7C%20BSD-lightgrey?style=plastic">
   <img src="https://img.shields.io/badge/license-MIT-green?style=plastic">
   <img src="https://img.shields.io/github/stars/TomfromBerlin/zsh-cmd-time?style=plastic">
+  <img src="https://img.shields.io/github/downloads/TomfromBerlin/zsh-cmd-time/total?style=plastic&labelColor=grey&color=blue">
 </p>
 <!--
 |![](https://img.shields.io/badge/zsh--plugin-zsh--cmd--time-blue?style=flat-square)|![](https://img.shields.io/badge/z%20shell%20version-%E2%89%A55.0-blue?style=flat-square)|![](https://img.shields.io/badge/platform-Linux%20%7C%20macOS%20%7C%20BSD-lightgrey?style=flat-square)|![](https://img.shields.io/badge/license-MIT-green?style=flat-square)|![](https://img.shields.io/github/stars/TomfromBerlin/zsh-cmd-time?style=flat-square)|
