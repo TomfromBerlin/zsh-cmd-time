@@ -24,13 +24,13 @@ All code changes happen through pull requests (PR). PRs are the best way to prop
 
 In short, when you submit code changes, your submissions are understood to be under the [GNU General Public License, Version 3](https://www.gnu.org/licenses/gpl-3.0.en.html), the license that covers the project. Feel free to contact the maintainers if that's a concern.
 
-## Report bugs/errors using Github's [issues](https://github.com/TomfromBerlin/bashrc/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc)
+## Report bugs/errors using Github's [issues](https://github.com/TomfromBerlin/zsh-cmd-time/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc)
 
-We use GitHub issues to track public bugs and errors. Report such things by [opening a new issue](https://github.com/TomfromBerlin/bashrc/issues/new/choose); it's that easy!
+We use GitHub issues to track public bugs and errors. Report such things by [opening a new issue](https://github.com/TomfromBerlin/zsh-cmd-time/issues/new/choose); it's that easy!
 
 ## Write reports with detail, background, and sample code (if necessary)
 
-At first, check if there is an [open issue](https://github.com/TomfromBerlin/bashrc/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc) related to your issue
+At first, check if there is an [open issue](https://github.com/TomfromBerlin/zsh-cmd-time/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc) related to your issue
 
 **Great Reports** tend to have:
 
