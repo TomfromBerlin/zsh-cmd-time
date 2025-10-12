@@ -10,6 +10,8 @@
 |-|-|-|-|-|
 -->
 
+_Memo to self: They'll clone this repository again and again and not leave a single comment. Yes, not even a tiny star. But at least my code is traveling around the world._
+
 ![zsh-cmd-time_test](https://github.com/TomfromBerlin/zsh-cmd-time/assets/123265893/622a5f14-e2e0-40a1-9a6a-58a91d142d5c)
 
 <!--## IF IT AIN'T BROKE, DON'T FIX IT!
@@ -54,10 +56,10 @@ _At this point, it is probably worth mentioning that the measured times do vary,
 
 ## Installation
 
-My first recommendation is: don't use a plugin manager or framework at all if you only want to use a few plugins to improve your daily zsh experience. Instead you can use [zsh_unplugged](/../../../../TomfromBerlin/zsh_unplugged). zsh_unplugged just contains around 20 lines of code. All you need is adding a few lines to your .zshrc-file:
+My first recommendation is: don't use a plugin manager or framework at all if you only want to use a few plugins to improve your daily zsh experience. Instead you can use [zsh_unplugged](/../../../../TomfromBerlin/zsh_unplugged). zsh_unplugged just contains around 20 lines of code. To install ZSH UNPLUGGED, simply add the following code to the '.zshrc' file:
 
 <details><summary>Code</summary>
-    
+
     ```
     # ZSH UNPLUGGED start (first part)
     # where do you want to store your plugins?
@@ -79,13 +81,32 @@ My first recommendation is: don't use a plugin manager or framework at all if yo
     and before `autoload -Uz promptinit && promptinit`, add
     
     ```
-    # ZSH UNPLUGGED start (second part)
+    # Prefix/Symbol for ZSH-CMD-TIME Message to display (set to "" for disable).
+    ZSH_CMD_TIME_MSG="\uF253"
+    # Message color.
+    ZSH_CMD_TIME_COLOR="cyan"
+    # Exclude some commands
+    ZSH_CMD_TIME_EXCLUDE=( vim nano mc mcedit bash clear cls )
+    REPORTTIME=3
+    #------------------------------
+    # tweak compinit
+    alias compinit='compinit-tweak'
+    compinit-tweak() {
+    grep -q "ZPLUGINDIR/*/*" <<< "${@}" && \compinit "${@}"
+    }
+    # now load plugins
     plugin-load $repos
-    # ZSH UNPLUGGED end (second part)
     ```
+    Best practice: place the second code block right before your prompt definitions and - as allready mentioned - mandatory before `autoload -Uz promptinit && promptinit`.
 </details>
 
-**❗ This plugin will replace your RPS1 definition. To avoid this, remove the strings below and add ${elapsed} or ${timer_show} to your RPS1. ❗**
+This will clone and load ZSH UNPLUGGED and this plugin. If ZSH UNPLUGGED is already installed, in your `.zshrc` file simply add the following line to the list of the repositories.
+
+```
+TomfromBerlin/zsh-cmd-time
+```
+ 
+**❗ This plugin will replace your RPS1 definition. To avoid this, remove the strings below and add `${elapsed}` or `${timer_show}` to your RPS1. ❗**
 
 ```zsh
 RPS1='%(?.%F{green}√.%K{red}%F{black} Nope!)%f%k'
