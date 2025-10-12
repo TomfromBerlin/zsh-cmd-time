@@ -1,12 +1,22 @@
-## IF IT AIN'T BROKE, DON'T FIX IT!
-Even though it's been a while since the last updates, the repo is still maintained. The code still runs in the Z shell.
-
-# zsh-cmd-time
-
-![https://img.shields.io/github/license/TomfromBerlin/zsh-cmd-time?style=plastic](https://img.shields.io/github/license/TomfromBerlin/zsh-cmd-time?style=plastic)| ![https://img.shields.io/github/v/release/TomfromBerlin/zsh-cmd-time?include_prereleases&style=plastic](https://img.shields.io/github/v/release/TomfromBerlin/zsh-cmd-time?include_prereleases&style=plastic) |
-|-|-|
+<p align="center">
+  <img src="https://img.shields.io/badge/zsh%20plugin-zsh--cmd--time-blue?style=plastic">
+  <img src="https://img.shields.io/badge/z%20shell%20version-%E2%89%A55.0-blue?style=plastic">
+  <img src="https://img.shields.io/badge/platform-Linux%20%7C%20macOS%20%7C%20BSD-lightgrey?style=plastic">
+  <img src="https://img.shields.io/badge/license-MIT-green?style=plastic">
+  <img src="https://img.shields.io/github/stars/TomfromBerlin/zsh-cmd-time?style=plastic">
+</p>
+<!--
+|![](https://img.shields.io/badge/zsh--plugin-zsh--cmd--time-blue?style=flat-square)|![](https://img.shields.io/badge/z%20shell%20version-%E2%89%A55.0-blue?style=flat-square)|![](https://img.shields.io/badge/platform-Linux%20%7C%20macOS%20%7C%20BSD-lightgrey?style=flat-square)|![](https://img.shields.io/badge/license-MIT-green?style=flat-square)|![](https://img.shields.io/github/stars/TomfromBerlin/zsh-cmd-time?style=flat-square)|
+|-|-|-|-|-|
+-->
 
 ![zsh-cmd-time_test](https://github.com/TomfromBerlin/zsh-cmd-time/assets/123265893/622a5f14-e2e0-40a1-9a6a-58a91d142d5c)
+
+<!--## IF IT AIN'T BROKE, DON'T FIX IT!
+Even though it's been a while since the last updates, the repo is still maintained. The code still runs in the Z shell.
+-->
+
+# zsh-cmd-time
 
 ## Introduction
 
