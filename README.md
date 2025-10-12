@@ -97,7 +97,7 @@ My first recommendation is: don't use a plugin manager or framework at all if yo
     # now load plugins
     plugin-load $repos
     ```
-    Best practice: place the second code block right before your prompt definitions and - as allready mentioned - mandatory before `autoload -Uz promptinit && promptinit`.
+Best practice: place the second code block right before your prompt definitions and - as allready mentioned - mandatory before `autoload -Uz promptinit && promptinit`.
 </details>
 
 This will clone and load ZSH UNPLUGGED and this plugin. If ZSH UNPLUGGED is already installed, in your `.zshrc` file simply add the following line to the list of the repositories.
