@@ -1,5 +1,5 @@
-# Created by https://www.toptal.com/developers/gitignore/api/zsh,linux,archlinuxpackages,archives,compressedarchive,kdiff3,windows,backup
-# Edit at https://www.toptal.com/developers/gitignore?templates=zsh,linux,archlinuxpackages,archives,compressedarchive,kdiff3,windows,backup
+# Created by https://www.toptal.com/developers/gitignore/api/zsh,linux,backup,kdiff3,windows,archives,archlinuxpackages,compressedarchive
+# Edit at https://www.toptal.com/developers/gitignore?templates=zsh,linux,backup,kdiff3,windows,archives,archlinuxpackages,compressedarchive
 
 ### Archives ###
 # It's better to unpack these files and commit the raw source because
@@ -46,11 +46,12 @@ pkg/
 src/
 
 ### Backup ###
-*.bak
+*.bak*
 *.gho
 *.ori
 *.orig
 *.tmp
+*.old
 
 ### CompressedArchive ###
 
@@ -198,6 +199,9 @@ src/
 # temporary files which can be created if a process still has a handle open of a deleted file
 .fuse_hidden*
 
+#kate - KDE default editor
+.kateproject
+
 # KDE directory preferences
 .directory
 
@@ -237,6 +241,12 @@ $RECYCLE.BIN/
 # Zsh completion-optimization dumpfile
 *zcompdump*
 
+# Zsh history
+.zsh_history
+
+# Zsh sessions
+.zsh_sessions
+
 # Zsh zcalc history
 .zcalc_history
 
@@ -259,37 +269,4 @@ zsdoc/data
 /tests/_output/*
 !/tests/_output/.gitkeep
 
-### Git ###
-# Created by git for backups. To disable backups in Git:
-# $ git config --global mergetool.keepBackup false
-*.orig
-
-# Created by git when using merge tools for conflicts
-*.BACKUP.*
-*.BASE.*
-*.LOCAL.*
-*.REMOTE.*
-*_BACKUP_*.txt
-*_BASE_*.txt
-*_LOCAL_*.txt
-*_REMOTE_*.txt
-
-### GitBook ###
-# Node rules:
-## Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
-.grunt
-
-## Dependency directory
-## Commenting this out is preferred by some people, see
-## https://docs.npmjs.com/misc/faq#should-i-check-my-node_modules-folder-into-git
-node_modules
-
-# Book build output
-_book
-
-# eBook build output
-*.epub
-*.mobi
-*.pdf
-
-# End of https://www.toptal.com/developers/gitignore/api/zsh,linux,archlinuxpackages,archives,compressedarchive,kdiff3,windows,backup
+# End of https://www.toptal.com/developers/gitignore/api/zsh,linux,backup,kdiff3,windows,archives,archlinuxpackages,compressedarchive

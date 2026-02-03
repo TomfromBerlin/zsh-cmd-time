@@ -9,7 +9,7 @@ indent_style = space
 indent_size = 4
 
 [*.zsh]
-indent_size = 2
+indent_size = 4
 
 [*.{md,markdown}]
 # Don't trim end spacing because unfortunately Markdown uses that

@@ -49,12 +49,15 @@ if ! add-zsh-hook precmd _cmd_time_precmd; then
     return 1
 fi
 
+setopt localoptions
+
 # Redraw prompt when terminal size changes
 TRAPWINCH() {
     zle && zle -R
     }
 _cmd_time_preexec() {
   # check excluded
+    typeset -g cmd_time_timer
     [[ -n "$ZSH_CMD_TIME_EXCLUDE" ]] && for exc in $ZSH_CMD_TIME_EXCLUDE; do [ "$(echo "$1" | grep -c "$exc")" -gt 0 ] && RPS1='${vcs_info_msg_0_} %(?.%F{green}√.%K{red}%F{black} Nope!)%f%k' && return; done
     cmd_time_timer=${cmd_time_timer:-$SECONDS}
     cmd_time_timer_show=""
@@ -62,7 +65,7 @@ _cmd_time_preexec() {
     }
 _cmd_time_precmd() {
     cmd_time_timer_show=""
-    [[ $cmd_time_timer ]] && cmd_time_timer_show=$(($SECONDS - $cmd_time_timer))
+    [[ $cmd_time_timer ]] && typeset -g cmd_time_timer_show=$(($SECONDS - $cmd_time_timer))
     export cmd_time_timer_show && zsh_cmd_time
     unset cmd_time_timer
     }
@@ -82,7 +85,7 @@ zsh_cmd_time() {
         elif [[ "$cmd_time_timer_show" -gt 60 ]] && [[ "$cmd_time_timer_show" -le 180 ]]; then ZSH_CMD_TIME_COLOR="cyan" && cmd_time_timer_show=$(printf '%02dm:%02ds' $((m)) $((s)))
         elif [[ "$h" -gt 0 ]]; then m=$((m%60)) && ZSH_CMD_TIME_COLOR="red" && cmd_time_timer_show=$(printf '%02dh:%02dm:%02ds' $((h)) $((m)) $((s))); else ZSH_CMD_TIME_COLOR="yellow" && cmd_time_timer_show=$(printf '%02dm:%02ds' $((m)) $((s)))
         fi
-          cmd_time_elapsed=$(echo -e "%F{$ZSH_CMD_TIME_COLOR}$(printf '%s' "${ZSH_CMD_TIME_MSG}"" $cmd_time_timer_show")%f")
+          typeset -g cmd_time_elapsed=$(echo -e "%F{$ZSH_CMD_TIME_COLOR}$(printf '%s' "${ZSH_CMD_TIME_MSG}"" $cmd_time_timer_show")%f")
           export cmd_time_elapsed
           RPS1='${cmd_time_elapsed} ${vcs_info_msg_0_} %(?.%F{green}√.%K{red}%F{black} Nope!)%f%k'
     fi
