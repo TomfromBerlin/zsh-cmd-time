@@ -7,7 +7,7 @@
 #                                                                              #
 # This plugin will overwrite your existing RPS1.                               #
 # You can avoid that by replacing the RPS1 definition in line 89               #
-# For the output of the execution time you have to keep ${cmd_time_elapsed}   #
+# For the output of the execution time you have to keep ${cmd_time_elapsed}    #
 #                                                                              #
 # For the output of decimal places you have to put                             #
 #                                                                              #
