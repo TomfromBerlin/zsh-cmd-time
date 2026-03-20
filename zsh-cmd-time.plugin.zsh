@@ -1,0 +1,1 @@
+/home/tom/.config/zsh/plugins/zsh-cmd-time/cmd-time.plugin.zsh
