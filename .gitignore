@@ -1,6 +1,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/zsh,linux,backup,kdiff3,windows,archives,archlinuxpackages,compressedarchive
 # Edit at https://www.toptal.com/developers/gitignore?templates=zsh,linux,backup,kdiff3,windows,archives,archlinuxpackages,compressedarchive
 
+### files
+zsh-cmd-time.plugin.zsh
+
 ### Archives ###
 # It's better to unpack these files and commit the raw source because
 # git has its own built in compression methods.
